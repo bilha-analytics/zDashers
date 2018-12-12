@@ -6,10 +6,7 @@ import numpy as np
 
 import re 
 
-
-print( os.getcwd() )
-
-
+import datetime as dt 
 
 
 """
@@ -39,7 +36,10 @@ from sqlalchemy import Table
 from sqlalchemy import create_engine 
 from sqlalchemy.orm import sessionmaker 
 
-import sshtunnel
+import sshtunnel 
+from sshtunnel import SSHTunnelForwarder 
+
+import psycopg2 
 
 sshtunnel.SSH_TIMEOUT = 5.0
 sshtunnel.TUNNEL_TIMEOUT = 5.0
@@ -64,6 +64,35 @@ def load_eng():
 	db = pd.DataFrame( q.all() )
 	
 
+
+def load_psql():
+	global db, dbh
+	host = "rdbms.dev.medicmobile.org"
+	port = 33696
+	ssh_port = 22
+	uname = "bilha" 
+	uword = "cpk4zgqq"
+	uwords = "@N#&user123"
+	dbname = "lg_innovation_ke"
+	
+	sshtunnel.SSH_TIMEOUT = 5.0
+	sshtunnel.TUNNEL_TIMEOUT = 5.0
+	
+	with SSHTunnelForwarder(
+		(host, ssh_port),
+		ssh_private_key = "id_rsa", 
+		ssh_username=uname,
+		ssh_password=uwords,
+		remote_bind_address=('localhost', port)
+	) as tunnel:
+	
+		print( "Server Connected") 
+		eng = create_engine("postgresql://{}:{}@127.0.0.1:{}/{}".format(uname, uword, tunnel.local_bind_port, dbname), echo=False)
+		
+		con = eng.connect()
+		db = pd.read_sql_table( "useview_referral_to_hf", eng)
+		dbh = pd.read_sql_table( "useview_hivst", eng)
+		print(">>>>>loaded")
 
 
 def load_tables_simple():
@@ -131,7 +160,7 @@ var_Display_Colz = ["reported_date", "chv_name", "patient_name" ,"reason_for_ref
 
 ###### DATE-TIME
 # 1. set Date of referral to a datetime type 
-db["reported_date"] = pd.to_datetime( db["reported_date"], format="%d/%m/%Y") # inplace=True)
+db["reported_date"] = pd.to_datetime( db["reported_date"], format="%Y-%m-%d") # inplace=True)
 #db["reported_date"] = pd.to_datetime( db["reported_date"].astype(str).str[:10], format="%Y-%m-%d") #%H:%M:%S
 
 # 2. Extract Month and year categories 
@@ -146,8 +175,8 @@ LAST_UPDATED = db["reported_date"].max().strftime( '%d-%b-%Y')
 
 
 # 1. set Date of referral to a datetime type 
-#dbh["reported_date"] = pd.to_datetime( dbh["reported_date"].astype(str).str[:10], format="%Y-%m-%d") 
-dbh["reported_date"] = pd.to_datetime( dbh["reported_date"], format="%d/%m/%Y") # inplace=True)
+#dbh["reported_date"] = pd.to_datetime( dbh["reported_date"].astype(str).str[:10], format="%Y-%m-%d") %d/%m/%Y
+dbh["reported_date"] = pd.to_datetime( dbh["reported_date"], format="%Y-%m-%d") # inplace=True)
 
 # 2. Extract Month and year categories 
 dbh["Year"] = dbh["reported_date"].dt.year 
@@ -188,7 +217,60 @@ options_facility = [var_all_reasons] + dbh.health_facility.unique().tolist()
 var_bucket_unit = "health_facility"
 
 
+dbp = pd.DataFrame()
+var_pa_risk_type = "Risk Type"
+STARTED_PA = pd.to_datetime( '2018-10-26', format="%Y-%m-%d").strftime( '%d-%b-%Y')
 
+def mend_PA():
+	global dbp, var_pa_risk_type
+	
+	colz = ["patient_id", "chw", "high_risk", "task_start", "task_end", "task_name"] 
+	colz_iccm = ["patient_id", "chw_id", "high_risk", "task_start", "task_end", "task_name"] 	
+	
+	dbp_iccm = pd.read_csv( "data/pa_iccm.csv" ) 
+	dbp_hf = pd.read_csv( "data/pa_hf.csv" ) 
+	dbp_neo = pd.read_csv( "data/pa_neo.csv" ) 
+	
+	dbp_iccm["task_name"] = "ICCM Monthly" 
+	
+	dbp_iccm = dbp_iccm[ colz_iccm]
+	dbp_iccm.columns = colz 
+	dbp_hf = dbp_hf[ colz]
+	dbp_neo = dbp_neo[ colz]
+	
+	
+	dbp_iccm[var_pa_risk_type] = "ICCM" 
+	dbp_hf[var_pa_risk_type] = "HF Delivery" 
+	dbp_neo[var_pa_risk_type] = "PNC Neonate" 
+	
+	dbp = pd.concat( [dbp_iccm, dbp_hf, dbp_neo] ) 
+	
+	dbp["task_start"] = pd.to_datetime( dbp["task_start"], format="%Y-%m-%d") # inplace=True)
+	dbp["Month"] = dbp["task_start"].dt.strftime('%b-%y') 
+
+	dbp["task_end"] = pd.to_datetime( dbp["task_end"], format="%Y-%m-%d") # inplace=True)
+	dbp["Month_end"] = dbp["task_end"].dt.strftime('%b-%y') 
+	
+	dbp.sort_values( by='task_start', inplace=True)
+	
+	#print( dbp.sample( 5 ) )
+	
+	#return dbp 
+	
+mend_PA() 
+options_pa = [ var_all_reasons] + dbp[var_pa_risk_type].unique().tolist()	
+
+def get_pivot_summary_PA(db): 
+	dl = len( db )
+	try:
+		t = pd.pivot_table( db, index=var_pa_risk_type, values=["patient_id"], aggfunc='count', margins=True ).T
+		t["Total per CHV"] = dl / len( db.chw.unique() )
+		t["Per CHV per Month"] = ( dl/ len( db.chw.unique() ) )/ ( pd.to_datetime( dt.datetime.now(), format="%Y-%m-%d" ).to_period('M') - pd.to_datetime( '2018-10-26', format="%Y-%m-%d").to_period('M'))
+		t['Number of CHVs'] =  len( db.chw.unique() ) 
+		t['Records per Client'] =  dl /len( db.patient_id.unique() )
+		return t.round(2)
+	except:
+		return pd.DataFrame()
 
 
 def get_pivot_summary_referrals(db):
@@ -217,3 +299,8 @@ def get_pivot_summary_hivst(dbh):
 	except:
 		return pd.DataFrame()
 		
+
+#pd.to_datetime( '2018-08-23', format="%Y-%m-%d"))	
+DURATION_CLE = pd.to_datetime( LAST_UPDATED, format="%d-%b-%Y").to_period('M') - pd.to_datetime( STARTED_CLE, format="%d-%b-%Y").to_period('M')
+DURATION_CLH = pd.to_datetime( LAST_UPDATED_HIVST, format="%d-%b-%Y").to_period('M') - pd.to_datetime( STARTED_HIVST, format="%d-%b-%Y").to_period('M')
+DURATION_PA = pd.to_datetime( LAST_UPDATED, format="%d-%b-%Y").to_period('M') - pd.to_datetime( STARTED_PA, format="%d-%b-%Y").to_period('M')

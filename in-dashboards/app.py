@@ -114,7 +114,7 @@ def display_value( tab ):
 	elif tab == CLH:
 		return get_layout_clh()
 	elif tab == PA:
-		return dht.H4( the_tabz[tab]['body'] )
+		return get_layout_pa() #dht.H4( the_tabz[tab]['body'] )
 	elif tab == BRC:
 		return dht.H4( the_tabz[tab]['body'] )
 	elif tab == WC:
@@ -151,7 +151,7 @@ def get_layout_cle():
 					get_Filter_Dropdown( options_reasons, 'Referral Reason', 'filter-reasons-id') 
 			]), 
 			dht.Div( className="col-sm-4", 
-				children=[ dht.P("From: {} To: {}".format( STARTED_CLE, LAST_UPDATED ), className="card-title" ) 
+				children=[ dht.P("From: {} To: {} = {} months".format( STARTED_CLE, LAST_UPDATED, DURATION_CLE ), className="card-title" ) 
 				]),
 			
 		]),
@@ -177,7 +177,7 @@ def get_layout_cle():
 			
 			## by month 
 			dht.Div(className="col-lg-3 stretch-card card", id='r1c3', children=[
-				get_Bar_Chart('g3r1', db["Month"].value_counts().index,  db["Month"].value_counts(), horizontal=False)
+				get_Line_Chart('g3r1', db["Month"].value_counts().index,  db["Month"].value_counts(), horizontal=False)
 			]),
 			
 			## by confirmation of referral 
@@ -239,9 +239,10 @@ def update_graph2(ref_reason):
 	
 	#df.sort_values( by='reported_date', inplace=True)
 	
-	d = df["Month"].value_counts(sort=False) #.sort_index()
+	#d = df["Month"].value_counts().sort_index()#.sort_index()
+	d = df["Month"].groupby(df["Month"], sort=False).count()
 	
-	return get_Bar_Chart('g3r1', 
+	return get_Line_Chart('g3r1', 
 		d.index,  
 		d,
 		title= "Monthly - {} ".format( ref_reason )
@@ -289,7 +290,7 @@ def get_layout_clh():
 				get_Filter_Dropdown( options_facility, 'Health Facility', 'filter-unit-id') 
 			]), 
 			dht.Div( className="col-sm-4", 
-				children=[ dht.P("From: {} To: {}".format( STARTED_HIVST, LAST_UPDATED_HIVST ), className="card-title" ) 
+				children=[ dht.P("From: {} To: {} = {} months".format( STARTED_HIVST, LAST_UPDATED_HIVST, DURATION_CLH ), className="card-title" ) 
 				]),
 			
 		]),
@@ -316,7 +317,7 @@ def get_layout_clh():
 			
 			## by month 
 			dht.Div(className="col-lg-3 stretch-card card", id='clh-r1c3', children=[
-				get_Bar_Chart('clh-g3r1', dbh["Month"].value_counts().index,  dbh["Month"].value_counts(), horizontal=False)
+				get_Line_Chart('clh-g3r1', dbh["Month"].value_counts().index,  dbh["Month"].value_counts(), horizontal=False)
 			]),
 			
 			## by confirmation of referral 
@@ -375,9 +376,9 @@ def update_graph2_clh(ref_reason):
 	
 	#df.sort_values( by='reported_date', inplace=True)
 	
-	d = df["Month"].value_counts(sort=False) #.sort_index() #sort=False) 
+	d = df["Month"].groupby(df["Month"], sort=False).count()
 	
-	return get_Bar_Chart('clh-g3r1', 
+	return get_Line_Chart('clh-g3r1', 
 		d.index,  
 		d, 
 		title= "Monthly - {} ".format( ref_reason )
@@ -398,6 +399,142 @@ def update_graph3_clh(ref_reason):
 	d,
 	title = "Confirmation - {}".format(ref_reason )
 	)
+
+
+
+'''
+PA 
+
+''' 
+
+cards3 = []
+t2 = get_pivot_summary_PA( dbp )
+lt = len( dbp[var_pa_risk_type].unique())
+for i in t.columns[lt:] : 
+	cards.append( make_Stats_Card(i, t[i][0] ) ) 
+
+def get_layout_pa():
+	return dht.Div(id='body-container', className="content-wrapper", children=[
+		## filter row
+		dht.Div(className="row form-group", children=[ 
+			dht.Div( className="col-sm-2 col-form-label", 
+				children=[ dht.P( "Select Risk Type: ", className="card-title")
+			]),
+			dht.Div( className="col-sm-6", 
+				children=[ 
+					get_Filter_Dropdown( options_pa, 'Risk Type', 'filter-risk-id') 
+			]), 
+			dht.Div( className="col-sm-4", 
+				children=[ dht.P("From: {} To: {} = {} months".format( STARTED_PA, LAST_UPDATED, DURATION_PA ), className="card-title" ) 
+				]),
+			
+		]),
+		
+		## row card stats
+		dht.Div(className="row", children=[ 
+			dht.Div( id="card-summaries-pa", className="col-xl-2 col-lg-2 col-md-2 col-sm-2 grid-margin stretch-card", children=cards3
+			)
+		]),
+		
+		
+		## graphs row 1
+		dht.Div(className="row", children=[
+			## by reasons all 
+			dht.Div(className="col-lg-3 stretch-card card", id='pr1c1', children=[
+				get_Bar_Chart('pg1r1', dbp[var_pa_risk_type].value_counts().index,  dbp[var_pa_risk_type].value_counts(),  horizontal=True, title="All PA Tasks", marker=bar_color )
+			]),
+			
+			## by high risk 
+			dht.Div(className="col-lg-3 stretch-card card", id='pr1c2', children=[
+				get_Bar_Chart('pg2r1', dbp["high_risk"].value_counts().index,  dbp["high_risk"].value_counts(), horizontal=True,  title="Is High Risk" )
+			]),
+			
+			## by month 
+			dht.Div(className="col-lg-3 stretch-card card", id='pr1c3', children=[
+				get_Line_Chart('pg3r1', dbp["Month"].value_counts().index,  dbp["Month"].value_counts(), horizontal=False)
+			]),
+			
+			## by task name 
+			dht.Div(className="col-lg-3 stretch-card card", id='pr1c4', children=[
+				get_Bar_Chart('pg4r1', dbp["task_name"].value_counts().index,  dbp["task_name"].value_counts(), horizontal=True,  title="Task Names" )
+			]),
+		]),
+		
+		
+	])	
+	
+
+## callbacks for card summaries
+@app.callback(Output('card-summaries-pa', 'children'),
+[Input('filter-risk-id', 'value')]) 
+def update_cards_pa(risk):
+	if risk == var_all_reasons:
+		df = dbp
+	else:
+		df = dbp[ dbp[var_pa_risk_type] == risk]
+	
+	t = get_pivot_summary_PA( df )	
+	lt = len( dbp[var_pa_risk_type].unique())			
+	t2 = t.columns[lt:] if risk == var_all_reasons else t.columns[1:] 
+	cards = []
+	for i in t2 :
+		cards.append( make_Stats_Card(i, t[i][0] ) ) 
+		
+	return cards 
+		
+## Callbacks for the graphs
+@app.callback(Output('pr1c2', 'children'),
+[Input('filter-risk-id', 'value')]) 
+def update_graph1p(risk):
+	if risk == var_all_reasons:
+		df = dbp
+	else:
+		df = dbp[ dbp[var_pa_risk_type] == risk]
+	
+	d = df["high_risk"].value_counts()
+	
+	return get_Bar_Chart('pg2r1', 
+		d.index,  
+		d,
+		title= "Is High Risk - {} ".format( risk) ,
+		horizontal=True	
+	)
+
+@app.callback(Output('pr1c3', 'children'),
+[Input('filter-risk-id', 'value')]) 
+def update_graph2p(risk):
+	if risk == var_all_reasons:
+		df = dbp
+	else:
+		df = dbp[ dbp[var_pa_risk_type] == risk]
+	
+	d1 = df["Month"].groupby(df["Month"], sort=False).count()
+	d2 = df["Month_end"].groupby(df["Month_end"], sort=False).count()
+	
+	return get_Line_Chart_2('pg3r1', 
+		d1.index, d2.index,   
+		d1, d2, 
+		"task_start", "task_end", 
+		title= "Monthly - {} ".format( risk )
+	)
+
+## Callbacks for the graphs
+@app.callback(Output('pr1c4', 'children'),
+[Input('filter-risk-id', 'value')]) 
+def update_graph1p(risk):
+	if risk == var_all_reasons:
+		df = dbp
+	else:
+		df = dbp[ dbp[var_pa_risk_type] == risk]
+	
+	d = df["task_name"].value_counts()
+	
+	return get_Bar_Chart('pg4r1', 
+		d.index,  
+		d,
+		title= "Task Name - {} ".format( risk) ,
+		horizontal=True	
+	)
 	
 
 
@@ -417,7 +554,7 @@ def layout_wordcloud():
 				get_Filter_Dropdown( options_reasons, 'Referral Reason', 'filter-reason-wc-id') 
 			]), 
 			dht.Div( className="col-sm-4", 
-				children=[ dht.P("From: {} To: {}".format( STARTED_CLE, LAST_UPDATED ), className="card-title" ) 
+				children=[ dht.P("From: {} To: {} = {} months".format( STARTED_CLE, LAST_UPDATED, DURATION_CLE ), className="card-title" ) 
 				]),
 			
 		]),
