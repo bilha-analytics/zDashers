@@ -37,7 +37,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker 
 
 import sshtunnel 
-from sshtunnel import SSHTunnelForwarder 
+from sshtunnel import SSHTunnelForwarder , create_logger
 
 import psycopg2 
 
@@ -67,8 +67,10 @@ def load_eng():
 
 def load_psql():
 	global db, dbh
-	host = "rdbms.dev.medicmobile.org"
-	port = 33696
+	rhost = "rdbms.dev.medicmobile.org"
+	host = 'localhost'
+	rport = 33696
+	db_port = 5432
 	ssh_port = 22
 	uname = "bilha" 
 	uword = "cpk4zgqq"
@@ -78,16 +80,20 @@ def load_psql():
 	sshtunnel.SSH_TIMEOUT = 5.0
 	sshtunnel.TUNNEL_TIMEOUT = 5.0
 	
+	print( ">>> creating SSH tunnel") 
+	
 	with SSHTunnelForwarder(
-		(host, ssh_port),
-		ssh_private_key = "id_rsa", 
+		(rhost, rport),
+		ssh_private_key = "c:\\Users\\Bilha\\.ssh\\id_rsa",  
 		ssh_username=uname,
 		ssh_password=uwords,
-		remote_bind_address=('localhost', port)
+		remote_bind_address=(host, db_port),
+		local_bind_address=(host,db_port),
+		logger = create_logger(loglevel=1)
 	) as tunnel:
 	
-		print( "Server Connected") 
-		eng = create_engine("postgresql://{}:{}@127.0.0.1:{}/{}".format(uname, uword, tunnel.local_bind_port, dbname), echo=False)
+		print( ">>> Connecting to DB") 
+		eng = create_engine("postgresql://{}:{}@{}:{}/{}".format(uname, uword, host, tunnel.local_bind_port, dbname), echo=False)
 		
 		con = eng.connect()
 		db = pd.read_sql_table( "useview_referral_to_hf", eng)
