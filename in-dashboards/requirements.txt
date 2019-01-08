@@ -16,3 +16,4 @@ cufflinks
 dash-bootstrap-components
 sqlalchemy
 sshtunnel
+psycopg2-binary

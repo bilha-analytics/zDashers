@@ -9,16 +9,40 @@ import pandas as pd
 #from layouts import digital_referral 
 
 from layouts.utils_commons import *
-from data.datasets import *
+from data import datasets 
 
 ## offline mode TODO
 #import plotly.offline as offline 
 #offline.init_notebook_mode()
 
+logit = datasets.check_hlog()
+
+def lazy_log( s ):
+	if logit: print( "-- @APP --: {}".format(s) ) 
+
+
+## Load Data 
+try:
+	datasets.load_psql() 
+except:
+	lazy_log("db load fail") 
+
+datasets.build_dsets()
+
+db, dbh, dbp = datasets.hget_dsets()
+
+#db_pa_risks = datasets.hget_pa_rates_cu()
+
+options_reasons, options_facility, options_pa = datasets.hget_options()
+
+DURATION_CLE, DURATION_CLH, DURATION_PA, STARTED_CLE, LAST_UPDATED, STARTED_HIVST, STARTED_PA, LAST_UPDATED_HIVST = datasets.hget_timestamps()
+
+lazy_log(">>>>> Loaded ---- db shape = {}, dbh shape = {}, dbp shape = {},".format(db.shape, dbh.shape, dbp.shape ) ) 
+lazy_log(">>>>> Loaded ---- options lists  LENs = referral: {}, facility: {}, pa: {}".format(len(options_reasons), len(options_facility), len(options_pa) ) ) 
+
 
 '''
 Tabbed layout; a tab for each project/treatment and general Ogembo as control 
-
 '''
 CLE = "cle"
 CLH = "clh"
@@ -56,7 +80,6 @@ the_tabz = {
 	},
 }
 
-
 '''
 MAIN APP
 '''
@@ -66,6 +89,10 @@ server = app.server
 
 app.config['suppress_callback_exceptions']=True
 app.title = "IN Initiatives Monitor"
+
+#app.layout = dht.Div( [
+#	dht.H1("Loading Data .... ") 
+#])
 
 
 app.layout = dht.Div(className="container-scroller", children=[
@@ -133,8 +160,10 @@ DIgital Referral Tab/View
 bar_color = { 'color': ['rgba(50, 171, 96, 0.8)', 'rgba(219, 64, 82, 0.8)', 'rgba(90,90,90,0.8)'] } 
 
 cards = []
-t = get_pivot_summary_referrals(db)
-lt = len( db[var_bucket_reasons].unique())
+t = datasets.get_pivot_summary_referrals(db)
+#lazy_log( ">>>> cards table {}".format( t ) )
+lt = len( db[datasets.var_bucket_reasons].unique())
+lazy_log( ">> {} ".format( db[datasets.var_bucket_reasons].unique() ) ) 
 for i in t.columns[lt:] : 
 	cards.append( make_Stats_Card(i, t[i][0] ) ) 
 
@@ -167,7 +196,7 @@ def get_layout_cle():
 		dht.Div(className="row", children=[
 			## by reasons all 
 			dht.Div(className="col-lg-3 stretch-card card", id='r1c1', children=[
-				get_Bar_Chart('g1r1', db[var_bucket_reasons].value_counts().index,  db[var_bucket_reasons].value_counts(),  horizontal=True, title="All Referrals", marker=bar_color )
+				get_Bar_Chart('g1r1', db[datasets.var_bucket_reasons].value_counts().index,  db[datasets.var_bucket_reasons].value_counts(),  horizontal=True, title="All Referrals", marker=bar_color )
 			]),
 			
 			## by facility 
@@ -194,16 +223,16 @@ def get_layout_cle():
 @app.callback(Output('card-summaries', 'children'),
 [Input('filter-reasons-id', 'value')]) 
 def update_cards(ref_reason):
-	if ref_reason == var_all_reasons:
+	if ref_reason == datasets.var_all_reasons:
 		df = db
 	else:
-		df = db[ db[var_bucket_reasons] == ref_reason]
+		df = db[ db[datasets.var_bucket_reasons] == ref_reason]
 	
-	t = get_pivot_summary_referrals( df)
+	t = datasets.get_pivot_summary_referrals( df)
 	
-	lt = len( db[var_bucket_reasons].unique())
+	lt = len( db[datasets.var_bucket_reasons].unique() )
 			
-	t2 = t.columns[lt:] if ref_reason == var_all_reasons else t.columns[1:]
+	t2 = t.columns[lt-1:] if ref_reason == datasets.var_all_reasons else t.columns[1:]
 	
 	cards = []
 	for i in t2 :
@@ -215,10 +244,10 @@ def update_cards(ref_reason):
 @app.callback(Output('r1c2', 'children'),
 [Input('filter-reasons-id', 'value')]) 
 def update_graph1(ref_reason):
-	if ref_reason == var_all_reasons:
+	if ref_reason == datasets.var_all_reasons:
 		df = db
 	else:
-		df = db[ db[var_bucket_reasons] == ref_reason]
+		df = db[ db[datasets.var_bucket_reasons] == ref_reason]
 	
 	d = df["health_facility"].value_counts()
 	
@@ -232,10 +261,10 @@ def update_graph1(ref_reason):
 @app.callback(Output('r1c3', 'children'),
 [Input('filter-reasons-id', 'value')]) 
 def update_graph2(ref_reason):
-	if ref_reason == var_all_reasons:
+	if ref_reason == datasets.var_all_reasons:
 		df = db
 	else:
-		df = db[ db[var_bucket_reasons] == ref_reason]
+		df = db[ db[datasets.var_bucket_reasons] == ref_reason]
 	
 	#df.sort_values( by='reported_date', inplace=True)
 	
@@ -251,17 +280,17 @@ def update_graph2(ref_reason):
 @app.callback(Output('r1c4', 'children'),
 [Input('filter-reasons-id', 'value')]) 
 def update_graph3(ref_reason):
-	if ref_reason == var_all_reasons:
+	if ref_reason == datasets.var_all_reasons:
 		df = db
 	else:
-		df = db[ db[var_bucket_reasons] == ref_reason]
+		df = db[ db[datasets.var_bucket_reasons] == ref_reason]
 		
 	d = df["health_facility_confirmation"].value_counts() 
 	
 	return get_Pie_Chart('g4r1', 
 		d.index,  
 		d,
-		title = "Confirmation - {}".format(ref_reason )
+		title = "Facility Confirmation - {}".format(ref_reason )
 	)
 		
 
@@ -273,7 +302,7 @@ HIVST Tab/View
 '''
 
 cards2 = []
-t2 = get_pivot_summary_hivst(dbh)
+t2 = datasets.get_pivot_summary_hivst(dbh)
 for i in t2.columns[3:] :
 	cards2.append( make_Stats_Card(i, t2[i][0] ) ) 
 
@@ -306,7 +335,7 @@ def get_layout_clh():
 		dht.Div(className="row", children=[
 			## by  all HIVST activity 
 			dht.Div(className="col-lg-3 stretch-card card", id='clh-r1c1', children=[
-				get_Bar_Chart('clh-g1r1', dbh[var_bucket_reasons].value_counts().index,  dbh[var_bucket_reasons].value_counts(),  horizontal=True, title="All HIVST Assessments", marker=bar_color )
+				get_Bar_Chart('clh-g1r1', dbh[datasets.var_bucket_reasons].value_counts().index,  dbh[datasets.var_bucket_reasons].value_counts(),  horizontal=True, title="All HIVST Assessments", marker=bar_color )
 				#get_Pie_Chart('clh-g1r1', dbh[var_bucket_reasons].value_counts().index,  dbh[var_bucket_reasons].value_counts(), title="All HIVST Assessments")
 			]),
 			
@@ -333,14 +362,14 @@ def get_layout_clh():
 @app.callback(Output('cards-clh', 'children'),
 [Input('filter-unit-id', 'value')]) 
 def update_cards_clh(ref_reason):
-	if ref_reason == var_all_reasons:
+	if ref_reason == datasets.var_all_reasons:
 		df = dbh
 	else:
-		df = dbh[ dbh[var_bucket_unit] == ref_reason]
+		df = dbh[ dbh[datasets.var_bucket_unit] == ref_reason]
 	
-	t = get_pivot_summary_hivst( df )
+	t = datasets.get_pivot_summary_hivst( df )
 	
-	t2 = t.columns[3:] if ref_reason == var_all_reasons else t.columns[1:] 
+	t2 = t.columns[3:] if ref_reason == datasets.var_all_reasons else t.columns[1:] 
 	
 	cards = []
 	for i in t2 :
@@ -352,10 +381,10 @@ def update_cards_clh(ref_reason):
 @app.callback(Output('clh-r1c2', 'children'),
 [Input('filter-unit-id', 'value')]) 
 def update_graph1_clh(ref_reason):
-	if ref_reason == var_all_reasons:
+	if ref_reason == datasets.var_all_reasons:
 		df = dbh
 	else:
-		df = dbh[ dbh[var_bucket_unit] == ref_reason]
+		df = dbh[ dbh[datasets.var_bucket_unit] == ref_reason]
 
 	d = df[ df["reason_for_referral"] != 'HIVST_Assessed' ]["reason_for_referral"].value_counts()
 	
@@ -369,13 +398,11 @@ def update_graph1_clh(ref_reason):
 @app.callback(Output('clh-r1c3', 'children'),
 [Input('filter-unit-id', 'value')]) 
 def update_graph2_clh(ref_reason):
-	if ref_reason == var_all_reasons:
+	if ref_reason == datasets.var_all_reasons:
 		df = dbh
 	else:
-		df = dbh[ dbh[var_bucket_unit] == ref_reason]
-	
-	#df.sort_values( by='reported_date', inplace=True)
-	
+		df = dbh[ dbh[datasets.var_bucket_unit] == ref_reason]
+		
 	d = df["Month"].groupby(df["Month"], sort=False).count()
 	
 	return get_Line_Chart('clh-g3r1', 
@@ -387,17 +414,17 @@ def update_graph2_clh(ref_reason):
 @app.callback(Output('clh-r1c4', 'children'),
 [Input('filter-unit-id', 'value')]) 
 def update_graph3_clh(ref_reason):
-	if ref_reason == var_all_reasons:
+	if ref_reason == datasets.var_all_reasons:
 		df = dbh
 	else:
-		df = dbh[ dbh[var_bucket_unit] == ref_reason]
+		df = dbh[ dbh[datasets.var_bucket_unit] == ref_reason]
 	
 	d = df["health_facility_confirmation"].value_counts() 
 	
 	return get_Pie_Chart('clh-g4r1', 
 	d.index,  
 	d,
-	title = "Confirmation - {}".format(ref_reason )
+	title = "Facility Confirmation - {}".format(ref_reason )
 	)
 
 
@@ -408,8 +435,8 @@ PA
 ''' 
 
 cards3 = []
-t2 = get_pivot_summary_PA( dbp )
-lt = len( dbp[var_pa_risk_type].unique())
+t2 = datasets.get_pivot_summary_PA( dbp )
+lt = len( dbp[datasets.var_pa_risk_type].unique())
 for i in t.columns[lt:] : 
 	cards.append( make_Stats_Card(i, t[i][0] ) ) 
 
@@ -441,7 +468,7 @@ def get_layout_pa():
 		dht.Div(className="row", children=[
 			## by reasons all 
 			dht.Div(className="col-lg-3 stretch-card card", id='pr1c1', children=[
-				get_Bar_Chart('pg1r1', dbp[var_pa_risk_type].value_counts().index,  dbp[var_pa_risk_type].value_counts(),  horizontal=True, title="All PA Tasks", marker=bar_color )
+				get_Bar_Chart('pg1r1', dbp[datasets.var_pa_risk_type].value_counts().index,  dbp[datasets.var_pa_risk_type].value_counts(),  horizontal=True, title="All PA Tasks", marker=bar_color )
 			]),
 			
 			## by high risk 
@@ -461,6 +488,14 @@ def get_layout_pa():
 		]),
 		
 		
+		## graphs row 2
+		dht.Div(className="row", children=[
+			## by reasons all 
+			dht.Div(className="col-lg-12 stretch-card card", id='pr2c1', children=[
+				hget_pa_Bar_Chart('pg1r2', datasets.hget_pa_rates_cu(), horizontal=False, title="Number of PA Risks - By CU", marker=bar_color )
+			]),
+		]),
+		
 	])	
 	
 
@@ -468,14 +503,14 @@ def get_layout_pa():
 @app.callback(Output('card-summaries-pa', 'children'),
 [Input('filter-risk-id', 'value')]) 
 def update_cards_pa(risk):
-	if risk == var_all_reasons:
+	if risk == datasets.var_all_reasons:
 		df = dbp
 	else:
-		df = dbp[ dbp[var_pa_risk_type] == risk]
+		df = dbp[ dbp[datasets.var_pa_risk_type] == risk]
 	
-	t = get_pivot_summary_PA( df )	
-	lt = len( dbp[var_pa_risk_type].unique())			
-	t2 = t.columns[lt:] if risk == var_all_reasons else t.columns[1:] 
+	t = datasets.get_pivot_summary_PA( df )	
+	lt = len( dbp[datasets.var_pa_risk_type].unique())			
+	t2 = t.columns[lt:] if risk == datasets.var_all_reasons else t.columns[1:] 
 	cards = []
 	for i in t2 :
 		cards.append( make_Stats_Card(i, t[i][0] ) ) 
@@ -486,10 +521,10 @@ def update_cards_pa(risk):
 @app.callback(Output('pr1c2', 'children'),
 [Input('filter-risk-id', 'value')]) 
 def update_graph1p(risk):
-	if risk == var_all_reasons:
+	if risk == datasets.var_all_reasons:
 		df = dbp
 	else:
-		df = dbp[ dbp[var_pa_risk_type] == risk]
+		df = dbp[ dbp[datasets.var_pa_risk_type] == risk]
 	
 	d = df["high_risk"].value_counts()
 	
@@ -503,10 +538,10 @@ def update_graph1p(risk):
 @app.callback(Output('pr1c3', 'children'),
 [Input('filter-risk-id', 'value')]) 
 def update_graph2p(risk):
-	if risk == var_all_reasons:
+	if risk == datasets.var_all_reasons:
 		df = dbp
 	else:
-		df = dbp[ dbp[var_pa_risk_type] == risk]
+		df = dbp[ dbp[datasets.var_pa_risk_type] == risk]
 	
 	d1 = df["Month"].groupby(df["Month"], sort=False).count()
 	d2 = df["Month_end"].groupby(df["Month_end"], sort=False).count()
@@ -522,10 +557,10 @@ def update_graph2p(risk):
 @app.callback(Output('pr1c4', 'children'),
 [Input('filter-risk-id', 'value')]) 
 def update_graph1p(risk):
-	if risk == var_all_reasons:
+	if risk == datasets.var_all_reasons:
 		df = dbp
 	else:
-		df = dbp[ dbp[var_pa_risk_type] == risk]
+		df = dbp[ dbp[datasets.var_pa_risk_type] == risk]
 	
 	d = df["task_name"].value_counts()
 	
@@ -536,6 +571,8 @@ def update_graph1p(risk):
 		horizontal=True	
 	)
 	
+#### ROW 2 PA
+
 
 
 '''
@@ -562,31 +599,55 @@ def layout_wordcloud():
 		## row word clouds 
 		dht.Div(className="row", children=[ 
 		
-			dht.Div(className="col-12 stretch-card card", id='wc1',  children=[
+			dht.Div(className="col-9 stretch-card card", id='wc1',  children=[
 				#dht.Img( src='data:image/png;base64,{}'.format( plot_word_cloud( db[ db[var_bucket_reasons] != var_HIVST ]["reason_for_referral"] ) ), id='wc1img' )
-				dht.Img( src=plot_word_cloud( db[ db[var_bucket_reasons] != var_HIVST ]["reason_for_referral"] , var_all_reasons), id='wc1img', width="80%", height="80%" )
+				dht.Img( src=plot_word_cloud( db[ db[datasets.var_bucket_reasons] != datasets.var_HIVST ]["reason_for_referral"] , datasets.var_all_reasons), id='wc1img', width="80%", height="80%" )
 			]),
 			
+			
+			dht.Div(className="col-3 stretch-card card", id='wc2',  children=[
+				get_Bar_Chart('wc2g1', db["source_form_name"].value_counts().index,  db["source_form_name"].value_counts(), horizontal=True,  title="Source Form" )
+			]),
 		]),
 				
 	])
 @app.callback(Output('wc1img', 'src'),
 [Input('filter-reason-wc-id', 'value')]) 
 def update_wordcloud(ref_reason):
-	df = db if ref_reason == var_HIVST else db[ db[var_bucket_reasons] != var_HIVST ]
-	if ref_reason == var_all_reasons:
+	df = db if ref_reason == datasets.var_HIVST else db[ db[datasets.var_bucket_reasons] != datasets.var_HIVST ]
+	if ref_reason == datasets.var_all_reasons:
 		df = df
 	else:
-		df = df[ df[var_bucket_reasons] == ref_reason]
+		df = df[ df[datasets.var_bucket_reasons] == ref_reason]
 		
 	#return 'data:image/png;base64,{}'.format( plot_word_cloud( df["reason_for_referral"] ) )
 	return plot_word_cloud( df["reason_for_referral"] , ref_reason) 
+
+
+@app.callback(Output('wc2', 'children'),
+[Input('filter-reason-wc-id', 'value')]) 
+def update_graph2wc(risk):
+	if risk == datasets.var_all_reasons:
+		df = db
+	else:
+		df = db[ db[datasets.var_bucket_reasons] == risk]
+	
+	d = df["source_form_name"].value_counts()
+	
+	return get_Bar_Chart('wc2g1', 
+		d.index,  
+		d,
+		title= "Source Form - {} ".format( risk) ,
+		horizontal=True	
+	)
+
 
 STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'output')
 @app.server.route('/output/<resource>' )
 def serve_image(resource): 
     return flask.send_from_directory(STATIC_PATH, resource) 
 
-if __name__ == '__main__':
-	app.run_server( debug=True ) 
+if __name__ == '__main__': 
+	## Run server 
+	app.run_server( debug=logit ) 
 	

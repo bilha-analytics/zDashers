@@ -202,3 +202,43 @@ def get_table(df, max_rows=10):
 		]) for i in range(min(len(df), max_rows))]
 	
 	)
+	
+
+def hget_pa_Bar_Chart(id, pv, title=None, horizontal=False, marker=defaultMarker):
+	
+	x = pv.index.tolist()
+	
+	ynames = pv.columns.tolist()
+	
+	col = "community_unit"
+	
+	traces = []
+	
+	i = 0
+	for y in pv.columns:
+		traces.append(
+			{
+			'x': y if horizontal else x,
+			'y': x if horizontal else pv[y],
+			#'text': ( ((y/y.sum()*100).round(0)).astype(int) ).astype(str)+"%", 
+			'type' : 'bar',	
+			'orientation': 'h' if horizontal else 'v', 
+			'textposition': 'auto', 
+			'name' : ynames[i], 
+			}			
+		)
+		i = i+1
+	
+		
+	return dcc.Graph(id=id, className="card",
+		figure = {
+			'data':  traces,
+			
+			'layout' : {
+				'title': title,
+				'font': {"family":'Arial', "size":10}, 
+				'xaxis': {"title": 'count' if horizontal else col}, 
+				'yaxis' : {"title": col if horizontal else 'count' }
+			}
+		}		
+	)
