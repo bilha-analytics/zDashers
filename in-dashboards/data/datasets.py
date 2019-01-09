@@ -215,11 +215,6 @@ def build_dsets():
 	db.drop( "chv_phone", axis=1, inplace=True)
 	db.drop( 'month', axis=1, inplace=True)
 
-	dbh["chv_name"] = "CHV " +  pd.Series( pd.factorize( dbh["chv_name"])[0] + 1).astype( str)
-	dbh["patient_name"] = "Patient " +  pd.Series( pd.factorize( dbh["patient_name"])[0] + 1).astype( str)
-	dbh.drop( "chv_phone", axis=1, inplace=True)
-
-
 	##### CLASSES
 	reasons_groupz = { 
 		"Neonates" : [ "months", "umbilical", "umbllical", "Survical"], 
@@ -253,6 +248,11 @@ def build_dsets():
 
 	## ---- B). CLH ----
 	## HIVST assessments 
+	
+	dbh["chv_name"] = "CHV " +  pd.Series( pd.factorize( dbh["chv_name"])[0] + 1).astype( str)
+	dbh["patient_name"] = "Patient " +  pd.Series( pd.factorize( dbh["patient_name"])[0] + 1).astype( str)
+	dbh.drop( "chv_phone", axis=1, inplace=True)
+
 	dbh["health_facility"][ pd.isnull(dbh["health_facility"] ) ] =  "Assessment Only" #== "[NULL]"
 	dbh["reason_for_referral"][ pd.isnull(dbh["reason_for_referral"] )] =  "HIVST_Assessed" #pd.isnull(dbh["reason_for_referral"])
 	dbh["Category Referral Reason"] = dbh["reason_for_referral"].apply( lambda x: searchString(x, reasons_groupz) ) 
