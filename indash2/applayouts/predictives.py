@@ -1,9 +1,10 @@
 import dash_core_components as dcc 
 import dash_html_components as dht 
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 
 from applayouts import ui_commons 
 from appmodel import model_commons  
+from appmodel.model_commons import * 
 
 ####
 ##
@@ -28,7 +29,7 @@ def get_layout( ):
 		]),
 		
 		## row card stats
-		dht.Div(className="row", children=[ 
+		dht.Div(className="row", id ="pa-cards", children=[ 
            ui_commons.make_stats_cards_div( [], "pa-card-summaries" ) 
 		]),
 		
@@ -55,7 +56,13 @@ def get_layout( ):
 				ui_commons.get_graph_holder('pa-r1g4')
 			]),
 		]),
-				
+		
+		## graphs row 2
+		dht.Div(className="row", children=[
+			dht.Div(className="col-12 stretch-card card", id='pa-r2c1', children=[
+				ui_commons.get_graph_holder('pa-r2g1') 
+			])
+		]),		
 	])	 
 
 
@@ -68,10 +75,10 @@ def register_callback(app):
 	#####
     ## callbacks for card summaries
     #####
-	@app.callback(Output('pa-card-summaries', 'children'), [Input('pa-filters-id', 'value')])
-	def update_cards(ref_reason): 		
-		dbp = model_commons.get_pa_data()
-		if( len( dbp.index) > 0):
+	@app.callback(Output('pa-card-summaries', 'children'), [Input('pa-filters-id', 'value'), Input( 'dbloader', 'value')], [State('pa-cards', 'children')])
+	def update_cards(ref_reason, n, old): 		
+		db = model_commons.get_pa_data()
+		if( len( db.index) > 0):
 			if ref_reason == model_commons.var_all_reasons:
 				df = db
 			else:
@@ -81,17 +88,17 @@ def register_callback(app):
 			
 			lt = len( db[model_commons.var_pa_risk_type].unique() )
 			
-			t2 = t.columns[lt:] if risk == model_commons.var_all_reasons else t.columns[1:]
+			t2 = t.columns[lt:] if ref_reason == model_commons.var_all_reasons else t.columns[1:]
 			
-			return [ ui_commons.make_stats_card(":{} - {}:".format(c, t[c][0]) , c) for c in t2]
+			return [ ui_commons.make_stats_card(c, t[c][0]) for c in t2]
 		else:
-			return []
+			return old #[]
 			
 	#####
     ## callbacks for card summaries
     #####
-	@app.callback(Output('pa-r1c2', 'children'), [Input('pa-filters-id', 'value')])
-	def update_graph2p(risk):		
+	@app.callback(Output('pa-r1c2', 'children'), [Input('pa-filters-id', 'value'), Input( 'dbloader', 'value')], [State('pa-r1c2', 'children')])
+	def update_graph2p(risk, n, old):		
 		dbp = model_commons.get_pa_data()
 		if( len( dbp.index) > 0):
 			if risk == model_commons.var_all_reasons:
@@ -99,15 +106,15 @@ def register_callback(app):
 			else:
 				df = dbp[ dbp[model_commons.var_pa_risk_type] == risk]
 			d = df["high_risk"].value_counts()
-			return get_Bar_Chart('pa-r1g2', d.index,  d, title= "Is High Risk - {} ".format( risk) , horizontal=True ) 	
+			return ui_commons.get_Bar_Chart('pa-r1g2', d.index,  d, title= "Is High Risk - {} ".format( risk) , horizontal=True ) 	
 		else:
-			return ui_commons.get_graph_holder('pa-r1g2')
+			return old #ui_commons.get_graph_holder('pa-r1g2')
 	
 	#####
     ## callbacks for card summaries
     #####
-	@app.callback(Output('pa-r1c3', 'children'), [Input('pa-filters-id', 'value')]) 
-	def update_graph3p(risk):		
+	@app.callback(Output('pa-r1c3', 'children'), [Input('pa-filters-id', 'value'), Input( 'dbloader', 'value')], [State('pa-r1c3', 'children')]) 
+	def update_graph3p(risk, n, old):		
 		dbp = model_commons.get_pa_data()
 		if( len( dbp.index) > 0):
 			if risk == model_commons.var_all_reasons:
@@ -116,15 +123,15 @@ def register_callback(app):
 				df = dbp[ dbp[model_commons.var_pa_risk_type] == risk]
 			d1 = df["Month"].groupby(df["Month"], sort=False).count()
 			d2 = df["Month_end"].groupby(df["Month_end"], sort=False).count()
-			return get_Line_Chart_2('pa-r1g3', d1.index, d2.index, d1, d2, "task_start", "task_end", title= "Monthly - {} ".format( risk ))
+			return ui_commons.get_Line_Chart_2('pa-r1g3', d1.index, d2.index, d1, d2, "task_start", "task_end", title= "Monthly - {} ".format( risk ))
 		else:
-			return ui_commons.get_graph_holder('pa-r1g3')
+			return old #ui_commons.get_graph_holder('pa-r1g3')
 
 	#####
     ## callbacks for card summaries
     #####
-	@app.callback(Output('pa-r1c4', 'children'), [Input('pa-filters-id', 'value')]) 
-	def update_graph4p(risk):		
+	@app.callback(Output('pa-r1c4', 'children'), [Input('pa-filters-id', 'value'), Input( 'dbloader', 'value')], [State('pa-r1c4', 'children')]) 
+	def update_graph4p(risk, n, old):		
 		dbp = model_commons.get_pa_data()
 		if( len( dbp.index) > 0):
 			if risk == model_commons.var_all_reasons:
@@ -132,11 +139,30 @@ def register_callback(app):
 			else:
 				df = dbp[ dbp[model_commons.var_pa_risk_type] == risk]
 			d = df["task_name"].value_counts()
-			return get_Bar_Chart('pa-r1g4', d.index,  d, title= "Task Name - {} ".format( risk) ,	horizontal=True	)
+			return ui_commons.get_Bar_Chart('pa-r1g4', d.index,  d, title= "Task Name - {} ".format( risk) ,	horizontal=True	)
 		else:
-			return ui_commons.get_graph_holder('pa-r1g4')
+			return old #ui_commons.get_graph_holder('pa-r1g4')
 		
+	
+	@app.callback(Output('pa-r1c1', 'children'), [Input( 'dbloader', 'value')], [State('pa-r1c1', 'children')])
+	def first_load_pa(n, old):
+		db = model_commons.get_pa_data()
+		if( len( db.index) > 0):
+			d = db[model_commons.var_pa_risk_type].value_counts()
+			return ui_commons.get_Bar_Chart('pa-r1g1', d.index,  d,  horizontal=True, title="All PA Tasks", marker=ui_commons.bar_color )
+		else:
+			return old
+	
 	#### ROW 2 PA
 	#####
     ## callbacks for card summaries
     #####
+	@app.callback(Output('pa-r2c1', 'children'), [Input( 'dbloader', 'value')], [State('pa-r2c1', 'children')])
+	def first_load_pa_r(n, old):
+		db = model_commons.hget_pa_rates_cu()
+		if( len( db.index) > 0):
+			return ui_commons.hget_pa_Bar_Chart('pA-r2g1', db, horizontal=False, title="Number of PA Task Visits By CU - Excepted/Target Vs Actual Visits", marker=ui_commons.bar_color )
+		else:
+			return old	
+	
+	

@@ -1,8 +1,9 @@
 import os, sys 
 import base64, re 
 from io import StringIO
+import io, boto3
 
-import ConfigParser
+import configparser
 
 ## data structures and manipulation 
 import pandas as pd
@@ -21,15 +22,38 @@ from sqlalchemy.orm import sessionmaker
 
 from appmodel.utils import lazy_logger 
 
+_goon = True
+
+S3_BUCKET = 'bglgin'
+
+DB_CLE = "cle.csv"
+DB_CLH = "clh.csv"
+DB_PA = "pa.csv"
+DB_PA_R = "pa_r.csv"
+
+_data_dir = "dat"
+_mode_cronned = True
+
 _pkey = None 
 _uword = None
 _uwords = None
+_uwho = None
+_awsid = None 
+_awskey = None 
 
-_db_cle = pd.DataFrame() 
-_db_clh = pd.DataFrame() 
-_db_pa = pd.DataFrame() 
-_db_pa_r = pd.DataFrame()  
+_db_colz = {
+    DB_CLE: [], 
+    DB_CLH: [], 
+    DB_PA: [], 
+    DB_PA_R: [] 
+    }
 
+_db_frames = {
+    DB_CLE: pd.DataFrame(columns= _db_colz[DB_CLE] ), 
+    DB_CLH: pd.DataFrame(columns= _db_colz[DB_CLH] ), 
+    DB_PA: pd.DataFrame(columns= _db_colz[DB_PA] ), 
+    DB_PA_R: pd.DataFrame(columns= _db_colz[DB_PA_R] ) 
+    }
 
 var_bucket_unit = "health_facility"
 var_pa_risk_type = "Risk Type"
@@ -48,68 +72,116 @@ reasons_groupz = {
 							"Pheumonia", "Malaria", "voting"],
 		"HIVST Refer" : ["reactive", "partner", "intimate"], 
 		"HIVST Ed" : ["HIVST_Assessed", ], 
-		"Unsupported Cases" : []
+		"Unsupported Cases" : [ "", "NULL", "null"], 
 	}
 
+def isGoOn():
+    global _goon
+    _goon = True
+    return _goon
+
+def getDataDir():
+    global _data_dir
+    if isGoOn():
+        lazy_logger("getDataDir", "Fetching from dat")
+        return "dat"
+    else:
+        lazy_logger("getDataDir", "Fetching from res")
+        return "res"
+
 ####
-##
+## TODO: refactor config reading 
 ##
 ####
+def config_load(key=None):
+    global _uwords, _uword, _uwho, _awsid, _awskey
+    
+    if isGoOn():
+        _uword = StringIO(str(os.environ.get("UWORDDB"))).getvalue()
+        _uwords = StringIO(str(os.environ.get("UWORDKEY"))).getvalue()
+        _uwho = StringIO(str(os.environ.get("UWHO"))).getvalue()
+        _awsid = StringIO(str(os.environ.get("AWS_ID"))).getvalue()
+        _awskey = StringIO(str(os.environ.get("AWS_KEY"))).getvalue()
+        _mode_cronned = StringIO(str(os.environ.get("UCRON"))).getvalue() == "TRUE"
+        lazy_logger("config_load", "FIN LOADED from ENV{} {} {} {} {}".format(_uword, _uwords, _uwho, _mode_cronned, _awsid) )
+    else:
+        et, ev, etr = sys.exc_info()
+        lazy_logger("config_load", "NOT in ENV - loading from file - {} {}".format(et, ev)) 
+        try:
+            cp = configparser.RawConfigParser()
+            cp.read( r'uwords_ignore') 
+            lazy_logger("config_load", "parser ready {} -- {}".format( cp.sections() , cp.defaults() ) ) 
+            _uword = cp.get('worderz', 'uworddb') #.getvalue()
+            _uwords = cp.get('worderz', 'uwordkey') #.getvalue()
+            _uwho = cp.get('worderz', 'uname') #.getvalue()
+            _awsid = cp.get('worderz', 'awsid') #.getvalue()
+            _awskey = cp.get('worderz', 'awskey') #.getvalue()
+            _mode_cronned = cp.get('worderz', 'cron').upper() == "TRUE"
+            lazy_logger("config_load", "FIN config file loaded {} {} {} {} {}".format(_uword, _uwords, _uwho, _mode_cronned, _awsid) )
+        except:
+            et, ev, etr = sys.exc_info()
+            lazy_logger("config_load", "ERROR config file not found - {} {}".format(et, ev) ) 
+
 def fetch_key():
     global _pkey 
     ##TODO thread safe lock 
     if ( _pkey is None):
         try:
-            _pkey = paramiko.RSAKey.from_private_key(StringIO(str(os.environ.get("DPRIV_KEY"))), fetch_uword_key() ) 
+            lazy_logger('fetch_key', "Starting uwords {}") #.format(_uwords) )
+            _pkey = paramiko.RSAKey.from_private_key(StringIO(str(os.environ.get("DPRIV_KEY"))), _uwords ) 
             lazy_logger('fetch_key', "Key found in env variable.")
-        except:
-            _pkey = "..\\id_rsa-lg" 
+        except: #_pkey = "C:\\Users\\wairimu\\.ssh\\id_rsa-lg" "C:\\Users\\BILHA\\.ssh\\id_rsa"
+            _pkey = "C:\\Users\\wairimu\\.ssh\\id_rsa-lg"
             lazy_logger('fetch_key', "Key not in env variable. Read from file")
     return _pkey 
 
-def fetch_uword_key(): 
-    global _uwords 
-    ##TODO thread safe lock 
-    if ( _uwords is None):
-        try:
-            _uwords = str(StringIO(str(os.environ.get("UWORD_KEY"))) )
-            if( _uwords is not None): 
-                lazy_logger('fetch_uword_key', "UWORD found in env variable.")
-            else:
-                _uwords = "..\\uword-key-lg" 
-                lazy_logger('fetch_uword_key', "UWORD not in env variable. Read from file")
-        except:
-            lazy_logger('fetch_uword_key', "ERROR : UWORD not found")
-    return _uwords 
 
-def fetch_uword_db():
-    global _uword
-    ##TODO thread safe lock 
-    if ( _uword is None):
-        try:
-            _uword = str(StringIO(str(os.environ.get("UWORD_DB")))) 
-            if( _uword is not None): 
-                lazy_logger('fetch_uword_db', "UWORD_DB found in env variable.")
-            else:
-                _uword = "..\\uword-db-lg" 
-                lazy_logger('fetch_uword_db', "UWORD_DB not in env variable. Read from file")
-        except:
-            lazy_logger('fetch_uword_db', "ERROR : UWORD_DB not found")
-    return _uword 
+"""
+Find a word = check if a cell has one of a given list of words and return the key of the list it has first
+"""
+def searchString( word, inDict): 
+	def get_s(s):
+		return str(s).upper() if (s is not None) else "Unsupported Cases" 
+	for k, v in inDict.items():
+		v = pd.Series( v ).apply( lambda s: get_s(s) )
+		#lazy_log( "%s [%s]"%(k,v ) )
+		rgx = re.compile( r'\b(?:%s)\b' % '|'.join( v ) )
+		if pd.isnull( word ):
+			return "No Response"
+		if rgx.search( word.upper() ) :
+			return k 
+
+####
+##
+##
+####
+def fetch_data_file(db_csv_name, dird="dat"):
+    db = pd.DataFrame()  
+    try:
+        lazy_logger("fetch_data_file", "START - Fetching table - {} @ {}".format( db_csv_name, _awsid ) )
+        s3 = boto3.client("s3", aws_access_key_id=_awsid, aws_secret_access_key=_awskey)
+        db = pd.read_csv( io.BytesIO( s3.get_object( Bucket=S3_BUCKET, Key="{}/{}".format(dird, db_csv_name) )['Body'].read() ) )
+    except:
+        et, ev, etr = sys.exc_info()
+        db = pd.read_csv( "{}/{}".format("res", db_csv_name) ) 
+        lazy_logger( "fetch_data_file" , "ERROR - {} {}".format(et, ev) )
+
+    return db 
 
 ####
 ##
 ##
 ####
 def fetch_data_psql( ls_tablez): 
+    res_tables = [] 
     rhost = "rdbms.dev.medicmobile.org"
     host = '127.0.0.1'
     rport = 33696
     db_port = 5432
     ssh_port = 22
-    uname = "bilha" 
-    uword = fetch_uword_db() 
-    uwords = fetch_uword_key() 
+    uname = _uwho  
+    uword = _uword 
+    uwords = _uwords 
     dbname = "lg_innovation_ke"
     sshtunnel.SSH_TIMEOUT = 5.0
     sshtunnel.TUNNEL_TIMEOUT = 5.0
@@ -117,20 +189,19 @@ def fetch_data_psql( ls_tablez):
     conn = None
     eng = None 
     tunnel = None
-    res_tables = [] 
 
     try:
         lazy_logger("fetch_data_sql", "START - SSH tunnel create to db")
 
         with SSHTunnelForwarder(
-			(rhost, rport),
-			ssh_private_key = fetch_key(), 
-			ssh_username=uname,
-			ssh_password=uwords,
-			remote_bind_address=(host, db_port), 
-			#logger = create_logger(loglevel=1) 
+            (rhost, rport),
+            ssh_private_key = fetch_key(), 
+            ssh_username=uname,
+            ssh_password=uwords,
+            remote_bind_address=(host, db_port), 
+            #logger = create_logger(loglevel=1) 
         ) as tunnel:
-            lazy_logger("fetch_data_sql", "DB Connection set up") 
+            lazy_logger("fetch_data_sql", "DB Connection set up {}")#.format(_uword)) 
             eng = create_engine("postgresql://{}:{}@{}:{}/{}".format(uname, uword, host, tunnel.local_bind_port, dbname), echo=False)
             con = eng.connect()
             
@@ -152,56 +223,89 @@ def fetch_data_psql( ls_tablez):
         except:
             et, ev, etr = sys.exc_info() 
             lazy_logger("fetch_data_sql", "ERROR closing connection - {} {}".format(et, ev) )  
+    return res_tables 
+
+def load_data_from_files(dird): 
+    global _db_frames
     
-    return res_tables
-
-
+    config_load()
+    
+    for d in _db_colz.keys():
+        db = fetch_data_file( d, dird )
+        _db_frames[ d ] = db 
+        lazy_logger("load_data_from_files", "LOADED - {} as shape {}".format(d, db.shape) ) 
+    
+    lazy_logger("load_data_from_files", "CHECK loaded" ) 
+    
+    for k, v in _db_frames.items():
+        lazy_logger("load_data_from_files", "FIN checked - {} shape = {}".format(k, v.shape) )   
 
 ####
 ##
 ##
 ####
 def get_cle_data():
-    global _db_cle
-    if( len(_db_cle.index) == 0):  ##TODO: time based refresh 
-        try:
-            lazy_logger("get_cle_data", "START data load CLE") 
+	lazy_logger("get_cle_data", "db frames found {}".format( _db_frames[DB_CLE].shape ) ) 
+	return _db_frames[DB_CLE]
 
-            _db_cle, = fetch_data_psql( ["useview_referral_to_hf"] ) 
+def set_cle_data(db):
+    global _db_frames
+    lazy_logger("set_cle_data", "db set to {}".format( db.shape ) ) 
+    _db_frames[DB_CLE] = db
 
-            _db_cle["chv_name"] = "CHV " +  pd.Series( pd.factorize( _db_cle["chv_name"])[0] + 1).astype( str)
-            _db_cle["patient_name"] = "Patient " +  pd.Series( pd.factorize( _db_cle["patient_name"])[0] + 1).astype( str)
-            _db_cle.drop( "chv_phone", axis=1, inplace=True)
-            _db_cle.drop( 'month', axis=1, inplace=True)
-
-            ## digital referrals 
-            _db_cle["Category Referral Reason"] = _db_cle["reason_for_referral"].apply( lambda x: searchString(x, reasons_groupz) ) 
-            
+def fetch_cle_sql():
+	_db_cle = pd.DataFrame() 
+	lazy_logger("get_cle_data", "CLE shape = {}".format( _db_cle.shape ) )
+	if( len(_db_cle.index) == 0):  ##TODO: time based refresh 
+		try:
+			lazy_logger("get_cle_data", "START data load CLE") 
+			
+			_db_cle, = fetch_data_psql( ["useview_referral_to_hf"] )
+			
+			lazy_logger("get_cle_data", "START data load CLE - found len {}".format( len(_db_cle) ) ) 
+			_db_cle["chv_name"] = "CHV " +  pd.Series( pd.factorize( _db_cle["chv_name"])[0] + 1).astype( str)
+			_db_cle["patient_name"] = "Patient " +  pd.Series( pd.factorize( _db_cle["patient_name"])[0] + 1).astype( str)
+			_db_cle.drop( "chv_phone", axis=1, inplace=True)
+			_db_cle.drop( 'month', axis=1, inplace=True)
+			
+			## digital referrals 
+			_db_cle["Category Referral Reason"] = _db_cle["reason_for_referral"].apply( lambda x: searchString(x, reasons_groupz) ) 
+			
             ###### DATE-TIME
-            # 1. set Date of referral to a datetime type 
-            _db_cle["reported_date"] = pd.to_datetime( _db_cle["reported_date"], format="%Y-%m-%d") # inplace=True) 
-
-            # 2. Extract Month and year categories 
-            _db_cle["Year"] = _db_cle["reported_date"].dt.year 
-            _db_cle["Month"] = _db_cle["reported_date"].dt.strftime('%b-%y') 
-            _db_cle["Day_of_Week"] = _db_cle["reported_date"].dt.weekday_name.str[:3] 
-
-            _db_cle.sort_values( by='reported_date', inplace=True)
-
-
-            lazy_logger("get_cle_data", "FIN data loaded for CLE") 
-        except:
-            et, ev, etr = sys.exc_info() 
-            lazy_logger("get_cle_data", "ERROR fetching CLE data - {} {}".format(et, ev) )
-    return _db_cle
+			# 1. set Date of referral to a datetime type 
+			_db_cle["reported_date"] = pd.to_datetime( _db_cle["reported_date"], format="%Y-%m-%d") # inplace=True) 
+			
+			# 2. Extract Month and year categories 
+			_db_cle["Year"] = _db_cle["reported_date"].dt.year 
+			_db_cle["Month"] = _db_cle["reported_date"].dt.strftime('%b-%y') 
+			_db_cle["Day_of_Week"] = _db_cle["reported_date"].dt.weekday_name.str[:3] 
+			
+			_db_cle.sort_values( by='reported_date', inplace=True)
+			
+			lazy_logger("get_cle_data", "FIN data loaded for CLE shape = {}".format( _db_cle.shape ) ) 
+		
+		except:
+			et, ev, etr = sys.exc_info() 
+			lazy_logger("get_cle_data", "ERROR fetching CLE data - {} {}".format(et, ev) )
+	else:
+		lazy_logger("get_cle_data", "ALREADY fetched CLE - reading local")
+	return _db_cle
 
 
 ####
 ##
 ##
 ####
+def set_clh_data(db):
+    global _db_frames
+    lazy_logger("set_clh_data", "db set to {}".format( db.shape ) ) 
+    _db_frames[DB_CLH] = db
+
 def get_clh_data():
-    global _db_clh
+    return _db_frames[DB_CLH]
+
+def fetch_clh_sql():
+    _db_clh  = pd.DataFrame()
     if( len(_db_clh.index) == 0 ):  ##TODO: time based refresh 
         try:
             lazy_logger("get_clh_data", "START data load CLH") 
@@ -232,7 +336,7 @@ def get_clh_data():
 
             _db_clh.sort_values( by='reported_date', inplace=True)
 
-            lazy_logger("get_clh_data", "FIN data loaded for CLH") 
+            lazy_logger("get_clh_data", "FIN data loaded for CLH shape = {}".format( _db_clh.shape ) ) 
         except:
             et, ev, etr = sys.exc_info() 
             lazy_logger("get_clh_data", "ERROR fetching CLH data - {} {}".format(et, ev) )
@@ -245,7 +349,15 @@ def get_clh_data():
 ##
 ####
 def get_pa_data():
-    global _db_pa
+    return _db_frames[DB_PA] 
+
+def set_pa_data(db):
+    global _db_frames
+    lazy_logger("set_pa_data", "db set to {}".format( db.shape ) )
+    _db_frames[DB_PA] = db
+
+def fetch_pa_sql():
+    _db_pa = pd.DataFrame()
     if( len(_db_pa.index) == 0):  ##TODO: time based refresh 
         try:
             lazy_logger("get_pa_data", "START data load PA") 
@@ -276,7 +388,7 @@ def get_pa_data():
             
             _db_pa.sort_values( by='task_start', inplace=True)
             
-            lazy_logger("get_pa_data", "FIN data loaded for PA") 
+            lazy_logger("get_pa_data", "FIN data loaded for PA shape = {}".format( _db_pa.shape ) ) 
         except:
             et, ev, etr = sys.exc_info() 
             lazy_logger("get_pa_data", "ERROR fetching PA data - {} : {}".format(et, ev) )
@@ -288,14 +400,22 @@ def get_pa_data():
 ##
 ####
 def get_pa_risks_data():
-    global _db_pa_r
+    return _db_frames[DB_PA_R]
+
+def set_pa_r_data(db):
+    global _db_frames
+    lazy_logger("set_pa_r_data", "db set to {}".format( db.shape ) ) 
+    _db_frames[DB_PA_R] = db
+
+def fetch_pa_r_sql(): 
+    _db_pa_r = pd.DataFrame()
     if( len(_db_pa_r.index) == 0):  ##TODO: time based refresh 
         try:
             lazy_logger("get_pa_risks_data", "START data load PA_R") 
 
             _db_pa_r, = fetch_data_psql( ["pa_dashboard_view_chw",] ) 
       
-            lazy_logger("get_pa_risks_data", "FIN data loaded for PA_R") 
+            lazy_logger("get_pa_risks_data", "FIN data loaded for PA_R shape = {}".format( _db_pa_r.shape ) ) 
         except:
             et, ev, etr = sys.exc_info() 
             lazy_logger("get_pa_risks_data", "ERROR fetching PA_R data - {} : {}".format(et, ev) )
@@ -308,9 +428,10 @@ def get_pa_risks_data():
 ####
 def get_cle_duration_details():
     STARTED, LAST_UPDATED, DURATION = [1990, 1990, -1]
+    _db_cle = _db_frames[DB_CLE]
     if( len(_db_cle.index) > 0 ):   
-        STARTED = max(_db_cle.reported_date.min(), pd.to_datetime( '2018-08-23', format="%Y-%m-%d")).strftime( '%d-%b-%Y')
-        LAST_UPDATED = _db_cle["reported_date"].max().strftime( '%d-%b-%Y')
+        STARTED = max( pd.to_datetime(_db_cle.reported_date, format="%Y-%m-%d").min(), pd.to_datetime( '2018-08-23', format="%Y-%m-%d")).strftime( '%d-%b-%Y')
+        LAST_UPDATED = pd.to_datetime(_db_cle["reported_date"], format="%Y-%m-%d").max().strftime( '%d-%b-%Y')
         DURATION = pd.to_datetime( LAST_UPDATED, format="%d-%b-%Y").to_period('M') - pd.to_datetime( STARTED, format="%d-%b-%Y").to_period('M')
     return STARTED, LAST_UPDATED, DURATION
 
@@ -320,9 +441,10 @@ def get_cle_duration_details():
 ####
 def get_clh_duration_details():
     STARTED, LAST_UPDATED, DURATION = [1990, 1990, -1]
+    _db_clh = _db_frames[DB_CLH]
     if( len(_db_clh.index) > 0 ):   
-        STARTED = max(_db_clh.reported_date.min(), pd.to_datetime( '2018-10-23', format="%Y-%m-%d")).strftime( '%d-%b-%Y')
-        LAST_UPDATED = _db_clh["reported_date"].max().strftime( '%d-%b-%Y')
+        STARTED = max(pd.to_datetime(_db_clh.reported_date, format="%Y-%m-%d").min(), pd.to_datetime( '2018-10-23', format="%Y-%m-%d")).strftime( '%d-%b-%Y')
+        LAST_UPDATED = pd.to_datetime(_db_clh["reported_date"], format="%Y-%m-%d").max().strftime( '%d-%b-%Y')
         DURATION = pd.to_datetime( LAST_UPDATED, format="%d-%b-%Y").to_period('M') - pd.to_datetime( STARTED, format="%d-%b-%Y").to_period('M')
     return STARTED, LAST_UPDATED, DURATION
 
@@ -332,9 +454,10 @@ def get_clh_duration_details():
 ####
 def get_pa_duration_details():
     STARTED, LAST_UPDATED, DURATION = [1990, 1990, -1]
+    _db_clh = _db_frames[DB_CLH]
     if( len(_db_clh.index) > 0 ):   
         STARTED = pd.to_datetime( '2018-10-26', format="%Y-%m-%d").strftime( '%d-%b-%Y') 
-        LAST_UPDATED = _db_clh["reported_date"].max().strftime( '%d-%b-%Y')
+        LAST_UPDATED = pd.to_datetime(_db_clh["reported_date"],format="%Y-%m-%d").max().strftime( '%d-%b-%Y')
         DURATION = pd.to_datetime( LAST_UPDATED, format="%d-%b-%Y").to_period('M') - pd.to_datetime( STARTED, format="%d-%b-%Y").to_period('M')
     return STARTED, LAST_UPDATED, DURATION
 
@@ -345,6 +468,7 @@ def get_pa_duration_details():
 ##
 ####
 def get_cle_options_list():
+    _db_cle = _db_frames[DB_CLE]
     if len(_db_cle.index) > 0: 
         return [ var_all_reasons] + _db_cle[var_bucket_reasons].unique().tolist()
     else:
@@ -356,6 +480,7 @@ def get_cle_options_list():
 ##
 ####
 def get_clh_options_list():
+    _db_clh = _db_frames[DB_CLH]
     if( len(_db_clh.index) > 0 ): 
         return [var_all_reasons] + _db_clh.health_facility.unique().tolist()
     else:
@@ -367,6 +492,7 @@ def get_clh_options_list():
 ##
 ####
 def get_pa_options_list():
+    _db_pa = _db_frames[DB_PA]
     if(len(_db_pa.index) > 0 ): 
         return [ var_all_reasons] + _db_pa[var_pa_risk_type].unique().tolist() 
     else:
@@ -377,61 +503,107 @@ def get_pa_options_list():
 ##
 ##
 ####
-def hget_pa_rates_cu(): 
-    try:
-        lazy_logger( "hget_pa_rates_cu", "get pivot " )
-        return pd.pivot_table( _db_pa_r, index="community_unit", 
-            values=["expected_high_risk_delivery_visits", "actual_high_risk_delivery_visits", 
-                    "expected_high_risk_pnc_visits", "actual_high_risk_pnc_visits",
-                    "expected_high_risk_iccm_visits", "actual_high_risk_iccm_visits", 
-                ], 
-                aggfunc='sum', margins=True )
-    except:
-        et, ev, etr = sys.exc_info() 
-        lazy_logger( "hget_pa_rates_cu", "ERROR pivot - {} : {}".format( et, ev ) ) 
-        return pd.DataFrame()  
+def hget_pa_rates_cu():
+	_db_pa_r = _db_frames[DB_PA_R] 
+	try:
+		lazy_logger( "hget_pa_rates_cu", "get pivot {} - {} - {}".format( _db_pa_r.shape, _db_pa_r.columns, _db_pa_r.columns  ) )
+		t = pd.pivot_table( _db_pa_r, index="community_unit", 
+			values=["expected_high_risk_delivery_visits", "actual_high_risk_delivery_visits", 
+					"expected_high_risk_pnc_visits", "actual_high_risk_pnc_visits",
+					"expected_high_risk_iccm_visits", "actual_high_risk_iccm_visits", 
+					], 
+			aggfunc='sum', margins=True )
+		t.columns = ["HF Delivery - Target", "HF Delivery - Actual","PNC Visits - Target", "PNC Visits - Actual", "ICCM - Target", "ICCM - Actual"] 
+		return t
+	except:
+		et, ev, etr = sys.exc_info() 
+		lazy_logger( "hget_pa_rates_cu", "ERROR pivot - {} : {}".format( et, ev ) ) 
+		return pd.DataFrame()  
 
 
 ### TODO: refector below group
 def get_pa_pivot_summary(db):
-    try:
-        t = pd.pivot_table( db, index=var_pa_risk_type, values=["patient_id"], aggfunc='count', margins=True ).T
-        t["Total per CHV"] = dl / len( db.chw.unique() )
-        t["Per CHV per Month"] = ( dl/ len( db.chw.unique() ) )/ ( pd.to_datetime( dt.datetime.now(), format="%Y-%m-%d" ).to_period('M') - pd.to_datetime( '2018-10-26', format="%Y-%m-%d").to_period('M'))
-        t['Number of CHVs'] =  len( db.chw.unique() )
-        t['Records per Client'] =  dl /len( db.patient_id.unique() )
-        lazy_logger( "get_pa_pivot_summary", "FIN pivot")
-        return t.round(2)
-    except:
-        et, ev, etr = sys.exc_info() 
-        lazy_logger( "get_pa_pivot_summary", "ERROR pivot - {} : {}".format( et, ev ) )
-        return pd.DataFrame()
+	dl = len( db )
+	try:
+		t = pd.pivot_table( db, index=var_pa_risk_type, values=["patient_id"], aggfunc='count', margins=True ).T
+		t["Total per CHV"] = dl / len( db.chw.unique() )
+		t["Per CHV per Month"] = ( dl/ len( db.chw.unique() ) )/ ( pd.to_datetime( dt.datetime.now(), format="%Y-%m-%d" ).to_period('M') - pd.to_datetime( '2018-10-26', format="%Y-%m-%d").to_period('M'))
+		t['Number of CHVs'] =  len( db.chw.unique() )
+		t['Records per Client'] =  dl /len( db.patient_id.unique() )
+		lazy_logger( "get_pa_pivot_summary", "FIN pivot")
+		return t.round(2)
+	except:
+		et, ev, etr = sys.exc_info() 
+		lazy_logger( "get_pa_pivot_summary", "ERROR pivot - {} : {}".format( et, ev ) )
+		return pd.DataFrame()
 
 
 def get_cle_pivot_summary(db):
-    try:
-        t = pd.pivot_table( db, index=var_bucket_reasons, values=["referral_uuid"], aggfunc='count', margins=True ).T
-        t["Total per CHV"] = dl / len( db.chv_name.unique() )
-        t["Per CHV per Month"] = ( dl/ len( db.chv_name.unique() ) )/ (db.reported_date.max().to_period('M') - max(db.reported_date.min().to_period('M'), pd.to_datetime( '2018-08-23', format="%Y-%m-%d").to_period('M')) )
-        t['Number of CHVs'] =  len( db.chv_name.unique() ) 
-        t['Records per Client'] =  dl /len( db.patient_name.unique() )
-        lazy_logger( "get_cle_pivot_summary", "FIN pivot")
-        return t.round(2) 
-    except:
-        et, ev, etr = sys.exc_info() 
-        lazy_logger( "get_cle_pivot_summary", "ERROR pivot - {} : {}".format( et, ev ) )
-        return pd.DataFrame()
+	dl = len( db )
+	lazy_logger("get_cle_pivot_summary", "db shape = {} ---\n {} \n {}".format( db.shape, db[var_bucket_reasons].unique(), db[var_bucket_reasons].value_counts() ) )
+	try:
+		db["reported_date"] = pd.to_datetime( db["reported_date"], format="%Y-%m-%d")
+		db[var_bucket_reasons].fillna("Unsupported Cases", inplace=True) 
+		t = pd.pivot_table( db, index=var_bucket_reasons, values=["referral_uuid"], aggfunc='count', margins=True ).T
+		t["Total per CHV"] = dl / len( db.chv_name.unique() )
+		t["Per CHV per Month"] = ( dl/ len( db.chv_name.unique() ) )/ (db.reported_date.max().to_period('M') - max(db.reported_date.min().to_period('M'), pd.to_datetime( '2018-08-23', format="%Y-%m-%d").to_period('M')) )
+		t['Number of CHVs'] =  len( db.chv_name.unique() ) 
+		t['Records per Client'] =  dl /len( db.patient_name.unique() )
+		lazy_logger( "get_cle_pivot_summary", "FIN pivot - {}".format( t.round(2) ) )
+		return t.round(2)
+	except:
+		et, ev, etr = sys.exc_info() 
+		lazy_logger( "get_cle_pivot_summary", "ERROR pivot - {} : {}".format( et, ev ) )
+		return pd.DataFrame()
 
 def get_clh_pivot_summary(dbh): 
+	try:
+		dbh["reported_date"] = pd.to_datetime( dbh["reported_date"], format="%Y-%m-%d")
+		lazy_logger( "get_clh_pivot_summary", "START pivot DB.SHAPE = {}".format( dbh.shape ) ) 
+		t2 = pd.pivot_table( dbh, index="health_facility", values=["hivst_enrollment_uuid"], aggfunc='count', margins=True ).T
+		t2["Total per CHV"] = len( dbh ) / len( dbh.chv_name.unique() )
+		t2["Per CHV per Month"] = (len( dbh ) / len( dbh.chv_name.unique() ) )/ (dbh.reported_date.max().to_period('M') - max(dbh.reported_date.min().to_period('M'), pd.to_datetime( '2018-10-24', format="%Y-%m-%d").to_period('M')) )
+		t2['Number of CHVs'] =  len( dbh.chv_name.unique() ) 
+		t2['Records per Client'] =  len(dbh)/len( dbh.patient_name.unique() )
+		lazy_logger( "get_clh_pivot_summary", "FIN pivot") 
+		return t2.round(2)
+	except:
+		et, ev, etr = sys.exc_info() 
+		lazy_logger( "get_clh_pivot_summary", "ERROR pivot - {} : {}".format( et, ev ) ) 
+		return pd.DataFrame()
+
+def fetch_data_to_ROM():
+    lazy_logger("fetch_data_to_file", "START fetch from db and save to ROM local")
+    config_load()
     try:
-        t2 = pd.pivot_table( dbh, index="health_facility", values=["hivst_enrollment_uuid"], aggfunc='count', margins=True ).T
-        t2["Total per CHV"] = len( dbh ) / len( dbh.chv_name.unique() )
-        t2["Per CHV per Month"] = (len( dbh ) / len( dbh.chv_name.unique() ) )/ (dbh.reported_date.max().to_period('M') - max(dbh.reported_date.min().to_period('M'), pd.to_datetime( '2018-10-24', format="%Y-%m-%d").to_period('M')) )
-        t2['Number of CHVs'] =  len( dbh.chv_name.unique() ) 
-        t2['Records per Client'] =  len(dbh)/len( dbh.patient_name.unique() )
-        lazy_logger( "get_clh_pivot_summary", "FIN pivot") 
-        return t2.round(2)
+        model_commons.set_cle_data( fetch_cle_sql() )
+        lazy_logger("fetch_data_to_file", "FIN DB_CLE")  
     except:
         et, ev, etr = sys.exc_info() 
-        lazy_logger( "get_clh_pivot_summary", "ERROR pivot - {} : {}".format( et, ev ) ) 
-        return pd.DataFrame()
+        lazy_logger("fetch_data_to_file", "ERROR DB_CLE - {} {}".format(et, ev) ) 
+    
+    
+    try:
+        set_clh_data( fetch_clh_sql() )
+        lazy_logger("fetch_data_to_file", "FIN DB_CLH")  
+    except:
+        et, ev, etr = sys.exc_info() 
+        lazy_logger("fetch_data_to_file", "ERROR DB_CLH - {} {}".format(et, ev) ) 
+   
+    
+    try:
+        set_pa_data( fetch_pa_sql() )
+        lazy_logger("fetch_data_to_file", "FIN DB_PA")  
+    except:
+        et, ev, etr = sys.exc_info() 
+        lazy_logger("fetch_data_to_file", "ERROR DB_PA- {} {}".format(et, ev) ) 
+    
+
+    try:
+        set_pa_r_data(fetch_pa_r_sql())
+        lazy_logger("fetch_data_to_file", "FIN DB_PA_R")  
+    except:
+        et, ev, etr = sys.exc_info() 
+        lazy_logger("fetch_data_to_file", "ERROR DB_PA_R - {} {}".format(et, ev) ) 
+        
+

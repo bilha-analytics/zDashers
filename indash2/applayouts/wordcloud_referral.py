@@ -1,9 +1,14 @@
+import flask
 import dash_core_components as dcc 
 import dash_html_components as dht 
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 
 from applayouts import ui_commons 
-from appmodel import model_commons  
+from appmodel import model_commons 
+
+from appmodel.model_commons import *  
+
+import pandas as pd 
 
 import os 
 
@@ -34,7 +39,7 @@ def get_layout( ):
 			## by reasons all 
 			dht.Div(className="col-9 stretch-card card", id='wc-r1c1', children=[
 				#ui_commons.get_graph_holder('wc-r1g1')
-				dht.Img( src=plot_word_cloud( ["loading",] , model_commons.var_all_reasons), id='wc1img', width="80%", height="80%" )
+				dht.Img( src=ui_commons.plot_word_cloud( pd.Series(["loading. . .",])  , "holder"), id='wc1-img', width="80%", height="80%" )
 			]),
 			
 			## by facility 
@@ -56,26 +61,33 @@ def register_callback(app):
 	#####
     ## callbacks for card summaries
     #####
-	@app.callback(Output('wc1img', 'src'), [Input('wc-filters-id', 'value')])
-	def update_wcimage(ref_reason):
+	@app.callback(Output('wc1-img', 'src'), [Input('wc-filters-id', 'value'), Input( 'dbloader', 'value')], [State('wc1-img', 'src')] )
+	def update_wc_image(ref_reason, n, old):
+		lazy_logger("update_wcimage", "START" )
 		db = model_commons.get_cle_data()
-		if( len( db.index) > 0):
+		lazy_logger("update_wcimage", "wc dat = {}".format( db.shape ) ) 
+		if len(db.index) > 0:
 			df = db if ref_reason == model_commons.var_HIVST else db[ db[model_commons.var_bucket_reasons] != model_commons.var_HIVST ]
+			lazy_logger("update_wcimage", "START wc dat filtered = {}".format( df.shape ) )
 
-			if ref_reason == model_commons.var_all_reasons:
-				df = df
-			else:
+			if ref_reason != model_commons.var_all_reasons:
 				df = df[ df[model_commons.var_bucket_reasons] == ref_reason] 
 
-			return ui_commons.plot_word_cloud( df["reason_for_referral"] , ref_reason) 
+			lazy_logger("update_wcimage", "DONE wc dat filtered = {}".format( df.shape ) )
+			return ui_commons.plot_word_cloud( df["reason_for_referral"] , ref_reason) #dht.Img( src=ui_commons.plot_word_cloud( df["reason_for_referral"] , ref_reason) , id='wc1-img', width="80%", height="80%" )
 		else:
-			return  ui_commons.plot_word_cloud( ["No Data Yet!"] , ref_reason) 
-    
-    #####
+			return  old #ui_commons.plot_word_cloud( pd.Series(["No Data Yet!",])  , "holder") 
+	
+	STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'output')
+	@app.server.route('/output/<resource>' )
+	def serve_image(resource): 
+		return flask.send_from_directory(STATIC_PATH, resource) 
+	
+	#####
     ## callbacks for card summaries
     #####
-	@app.callback(Output('wc-r1c2', 'children'), [Input('wc-filters-id', 'value')]) 
-	def update_graph2wc(risk):
+	@app.callback(Output('wc-r1c2', 'children'), [Input('wc-filters-id', 'value'), Input( 'dbloader', 'value')], [State('wc-r1c2', 'children')]) 
+	def update_graph2wc(risk, n, old):
 		db = model_commons.get_cle_data()
 		if( len( db.index) > 0):
 			if risk == model_commons.var_all_reasons:
@@ -85,10 +97,15 @@ def register_callback(app):
 			d = df["source_form_name"].value_counts()
 			return ui_commons.get_Bar_Chart('wc-r1g2', d.index,  d,title= "Source Form - {} ".format( risk) ,horizontal=True	)
 		else:
-			return ui_commons.get_graph_holder('wc-r1g2')
+			return old #ui_commons.get_graph_holder('wc-r1g2')
+		
 	
-
-	STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'output')
-	@app.server.route('/output/<resource>' )
-	def serve_image(resource): 
-		return flask.send_from_directory(STATIC_PATH, resource) 
+	@app.callback(Output('wc-r1c1', 'children'), [Input( 'dbloader', 'value')], [State('wc-r1c1', 'children')])
+	def first_load_wc(n,old):
+		db = model_commons.get_cle_data()
+		if( len( db.index) > 0):
+			return ui_commons.plot_word_cloud( db["reason_for_referral"] , model_commons.var_all_reasons)
+		else:
+			return old
+	
+	

@@ -1,0 +1,202 @@
+,village,county,sub_county,branch,community_unit,chw_id,chw_name,chw_area_id,year,month,month_start,expected_high_risk_delivery_visits,actual_high_risk_delivery_visits,expected_high_risk_pnc_visits,actual_high_risk_pnc_visits,expected_high_risk_iccm_visits,actual_high_risk_iccm_visits
+0,Getome,Kisii,Bomachoge chache,Ogembo,Kineni,0038cac2-e440-4131-95ab-d8abe734a383,Josephine Basweti Onduso,090599c7-6eb8-4f4c-b0d7-651100c30a41,2018,11,2018-11-01,0,0,0,0,0,0
+1,Getome,Kisii,Bomachoge chache,Ogembo,Kineni,0038cac2-e440-4131-95ab-d8abe734a383,Josephine Basweti Onduso,090599c7-6eb8-4f4c-b0d7-651100c30a41,2018,12,2018-12-01,0,0,0,0,0,0
+2,Getome,Kisii,Bomachoge chache,Ogembo,Kineni,0038cac2-e440-4131-95ab-d8abe734a383,Josephine Basweti Onduso,090599c7-6eb8-4f4c-b0d7-651100c30a41,2019,1,2019-01-01,0,0,0,0,0,0
+3,Mt Sinai,Kisii,Bomachoge chache,Ogembo,Nyansakia,01254c4b-2d22-4a31-a34a-8086cf951ec8,Irene Kausi,6b51cd84-6f03-47e0-9a67-b85c4aedbb2a,2018,11,2018-11-01,0,0,0,0,8,0
+4,Mt Sinai,Kisii,Bomachoge chache,Ogembo,Nyansakia,01254c4b-2d22-4a31-a34a-8086cf951ec8,Irene Kausi,6b51cd84-6f03-47e0-9a67-b85c4aedbb2a,2018,12,2018-12-01,0,0,0,0,11,0
+5,Mt Sinai,Kisii,Bomachoge chache,Ogembo,Nyansakia,01254c4b-2d22-4a31-a34a-8086cf951ec8,Irene Kausi,6b51cd84-6f03-47e0-9a67-b85c4aedbb2a,2019,1,2019-01-01,0,0,0,0,7,0
+6,Nyagengi,Kisii,Bomachoge chache,Ogembo,Misesi,03aca809-5ff0-4617-8d66-75fe24ad0137,Rose Kwamboka,4e03c430-7240-4366-ad98-7a7c3240c1b4,2018,11,2018-11-01,0,0,2,2,1,1
+7,Nyagengi,Kisii,Bomachoge chache,Ogembo,Misesi,03aca809-5ff0-4617-8d66-75fe24ad0137,Rose Kwamboka,4e03c430-7240-4366-ad98-7a7c3240c1b4,2018,12,2018-12-01,0,0,4,2,2,2
+8,Nyagengi,Kisii,Bomachoge chache,Ogembo,Misesi,03aca809-5ff0-4617-8d66-75fe24ad0137,Rose Kwamboka,4e03c430-7240-4366-ad98-7a7c3240c1b4,2019,1,2019-01-01,0,0,0,0,2,0
+9,Matierio,Kisii,Bomachoge chache,Ogembo,Motongo,07d6becc-8939-43e9-874e-b4190bd79a3e,Job Osoro,3d117649-cce1-471a-bd37-f8f68db1dbcf,2018,11,2018-11-01,0,0,0,0,7,0
+10,Matierio,Kisii,Bomachoge chache,Ogembo,Motongo,07d6becc-8939-43e9-874e-b4190bd79a3e,Job Osoro,3d117649-cce1-471a-bd37-f8f68db1dbcf,2018,12,2018-12-01,0,0,0,0,5,0
+11,Matierio,Kisii,Bomachoge chache,Ogembo,Motongo,07d6becc-8939-43e9-874e-b4190bd79a3e,Job Osoro,3d117649-cce1-471a-bd37-f8f68db1dbcf,2019,1,2019-01-01,0,0,0,0,0,0
+12,Bomanga,Kisii,Bomachoge chache,Ogembo,Nyaisero,0be4575e-0350-44ab-81f6-41a7b21c3b8b,Risper Marata,db68404e-1f42-4533-9431-8ff41f7cb2e9,2018,11,2018-11-01,0,0,0,0,2,1
+13,Bomanga,Kisii,Bomachoge chache,Ogembo,Nyaisero,0be4575e-0350-44ab-81f6-41a7b21c3b8b,Risper Marata,db68404e-1f42-4533-9431-8ff41f7cb2e9,2018,12,2018-12-01,0,0,0,0,2,2
+14,Bomanga,Kisii,Bomachoge chache,Ogembo,Nyaisero,0be4575e-0350-44ab-81f6-41a7b21c3b8b,Risper Marata,db68404e-1f42-4533-9431-8ff41f7cb2e9,2019,1,2019-01-01,0,0,0,0,2,1
+15,Kerongo,Kisii,Bomachoge chache,Ogembo,Motongo,100270dd-5767-4833-bfad-a069c5ee96b6,Phemince Kemunto,9562cbd6-2fea-44a3-85ea-399b594ead6c,2018,11,2018-11-01,0,0,0,0,0,0
+16,Kerongo,Kisii,Bomachoge chache,Ogembo,Motongo,100270dd-5767-4833-bfad-a069c5ee96b6,Phemince Kemunto,9562cbd6-2fea-44a3-85ea-399b594ead6c,2018,12,2018-12-01,0,0,0,0,0,0
+17,Kerongo,Kisii,Bomachoge chache,Ogembo,Motongo,100270dd-5767-4833-bfad-a069c5ee96b6,Phemince Kemunto,9562cbd6-2fea-44a3-85ea-399b594ead6c,2019,1,2019-01-01,0,0,0,0,0,0
+18,Mananasi 2,Kisii,Bomachoge chache,Ogembo,Nyansakia,15b66f32-5555-4e5a-9c97-9104510ba207,Aloisa Nyangarisa,66957aa1-8b1a-474d-b10f-6b0090beeb03,2018,11,2018-11-01,0,0,0,0,0,0
+19,Mananasi 2,Kisii,Bomachoge chache,Ogembo,Nyansakia,15b66f32-5555-4e5a-9c97-9104510ba207,Aloisa Nyangarisa,66957aa1-8b1a-474d-b10f-6b0090beeb03,2018,12,2018-12-01,0,0,0,0,2,0
+20,Mananasi 2,Kisii,Bomachoge chache,Ogembo,Nyansakia,15b66f32-5555-4e5a-9c97-9104510ba207,Aloisa Nyangarisa,66957aa1-8b1a-474d-b10f-6b0090beeb03,2019,1,2019-01-01,0,0,0,0,2,0
+21,Ketiongo,Kisii,Bomachoge chache,Ogembo,Nyaisero,18cbee54-366a-4615-90a1-d072e98e3657,Rose Omaiyo,271f9f2e-9610-43da-b05a-bfa1d5078331,2018,11,2018-11-01,0,0,0,0,13,2
+22,Ketiongo,Kisii,Bomachoge chache,Ogembo,Nyaisero,18cbee54-366a-4615-90a1-d072e98e3657,Rose Omaiyo,271f9f2e-9610-43da-b05a-bfa1d5078331,2018,12,2018-12-01,0,0,2,0,12,2
+23,Ketiongo,Kisii,Bomachoge chache,Ogembo,Nyaisero,18cbee54-366a-4615-90a1-d072e98e3657,Rose Omaiyo,271f9f2e-9610-43da-b05a-bfa1d5078331,2019,1,2019-01-01,0,0,0,0,3,0
+24,Kemboa,Kisii,Bomachoge chache,Ogembo,Nyansakia,1aa7fdf0-a7b0-4817-b3a1-4699754bfc33,Jackline Kerubo,60ada0a3-c9bc-4da5-917c-cd5a613b4b49,2018,11,2018-11-01,0,0,0,0,3,0
+25,Kemboa,Kisii,Bomachoge chache,Ogembo,Nyansakia,1aa7fdf0-a7b0-4817-b3a1-4699754bfc33,Jackline Kerubo,60ada0a3-c9bc-4da5-917c-cd5a613b4b49,2018,12,2018-12-01,0,0,0,0,0,0
+26,Kemboa,Kisii,Bomachoge chache,Ogembo,Nyansakia,1aa7fdf0-a7b0-4817-b3a1-4699754bfc33,Jackline Kerubo,60ada0a3-c9bc-4da5-917c-cd5a613b4b49,2019,1,2019-01-01,0,0,0,0,0,0
+27,Bomoseri Nyantogo,Kisii,Bomachoge chache,Ogembo,Misesi,1ab399b8-7698-4b29-9c12-2eae9c047433,Briscah Kerubo Ondieki,2a938226-ff33-4086-8bda-964ea2229600,2018,11,2018-11-01,0,0,0,0,9,0
+28,Bomoseri Nyantogo,Kisii,Bomachoge chache,Ogembo,Misesi,1ab399b8-7698-4b29-9c12-2eae9c047433,Briscah Kerubo Ondieki,2a938226-ff33-4086-8bda-964ea2229600,2018,12,2018-12-01,0,0,0,0,6,0
+29,Bomoseri Nyantogo,Kisii,Bomachoge chache,Ogembo,Misesi,1ab399b8-7698-4b29-9c12-2eae9c047433,Briscah Kerubo Ondieki,2a938226-ff33-4086-8bda-964ea2229600,2019,1,2019-01-01,0,0,0,0,1,0
+30,Motongo Nyansira,Kisii,Bomachoge chache,Ogembo,Motongo,1ebf8cf3-908d-4118-a72e-108082491bee,Lydia Zachary,80c63606-e1e3-46a4-a24e-c881c60f64e1,2018,11,2018-11-01,0,0,0,0,4,0
+31,Motongo Nyansira,Kisii,Bomachoge chache,Ogembo,Motongo,1ebf8cf3-908d-4118-a72e-108082491bee,Lydia Zachary,80c63606-e1e3-46a4-a24e-c881c60f64e1,2018,12,2018-12-01,0,0,2,2,1,0
+32,Motongo Nyansira,Kisii,Bomachoge chache,Ogembo,Motongo,1ebf8cf3-908d-4118-a72e-108082491bee,Lydia Zachary,80c63606-e1e3-46a4-a24e-c881c60f64e1,2019,1,2019-01-01,0,0,0,0,1,0
+33,Bomwamu A,Kisii,Bomachoge chache,Ogembo,Motongo,21219e96-c8b0-4400-90ee-cb9c4037d464,Gladys Okongo,7cc508f4-f5ec-4469-89be-13cd01611485,2018,11,2018-11-01,0,0,0,0,0,0
+34,Bomwamu A,Kisii,Bomachoge chache,Ogembo,Motongo,21219e96-c8b0-4400-90ee-cb9c4037d464,Gladys Okongo,7cc508f4-f5ec-4469-89be-13cd01611485,2018,12,2018-12-01,0,0,0,0,6,4
+35,Bomwamu A,Kisii,Bomachoge chache,Ogembo,Motongo,21219e96-c8b0-4400-90ee-cb9c4037d464,Gladys Okongo,7cc508f4-f5ec-4469-89be-13cd01611485,2019,1,2019-01-01,0,0,0,0,4,3
+36,Nyagengi,Kisii,Bomachoge chache,Ogembo,Misesi,2309c250-3bfe-42ba-9764-29fabc245915,Jackline Nyangarisa,050020e1-31e4-48fd-9803-db20d13d9cb6,2018,11,2018-11-01,0,0,0,0,1,0
+37,Nyagengi,Kisii,Bomachoge chache,Ogembo,Misesi,2309c250-3bfe-42ba-9764-29fabc245915,Jackline Nyangarisa,050020e1-31e4-48fd-9803-db20d13d9cb6,2018,12,2018-12-01,0,0,0,0,0,0
+38,Nyagengi,Kisii,Bomachoge chache,Ogembo,Misesi,2309c250-3bfe-42ba-9764-29fabc245915,Jackline Nyangarisa,050020e1-31e4-48fd-9803-db20d13d9cb6,2019,1,2019-01-01,0,0,0,0,0,0
+39,Kenyoro,Kisii,Bomachoge chache,Ogembo,Nyaisero,2af9875f-86ed-4bd9-b34b-fbb838946c1a,Joseph Nyangau Ogega,3cb61b91-01a1-43ab-a10f-01df9a486634,2018,11,2018-11-01,0,0,0,0,17,0
+40,Kenyoro,Kisii,Bomachoge chache,Ogembo,Nyaisero,2af9875f-86ed-4bd9-b34b-fbb838946c1a,Joseph Nyangau Ogega,3cb61b91-01a1-43ab-a10f-01df9a486634,2018,12,2018-12-01,2,0,0,0,13,0
+41,Kenyoro,Kisii,Bomachoge chache,Ogembo,Nyaisero,2af9875f-86ed-4bd9-b34b-fbb838946c1a,Joseph Nyangau Ogega,3cb61b91-01a1-43ab-a10f-01df9a486634,2019,1,2019-01-01,0,0,0,0,6,0
+42,Kineni,Kisii,Bomachoge chache,Ogembo,Kineni,2db19c95-b533-476c-9f7a-959c80a3f18b,Risper Bitutu,9f72844a-80d7-498f-a32c-fd9cd79138d3,2018,11,2018-11-01,0,0,2,0,1,1
+43,Kineni,Kisii,Bomachoge chache,Ogembo,Kineni,2db19c95-b533-476c-9f7a-959c80a3f18b,Risper Bitutu,9f72844a-80d7-498f-a32c-fd9cd79138d3,2018,12,2018-12-01,0,0,1,0,2,1
+44,Kineni,Kisii,Bomachoge chache,Ogembo,Kineni,2db19c95-b533-476c-9f7a-959c80a3f18b,Risper Bitutu,9f72844a-80d7-498f-a32c-fd9cd79138d3,2019,1,2019-01-01,0,0,1,0,1,0
+45,Gucha/nyanseraI,Kisii,Bomachoge chache,Ogembo,Nyaisero,2eda8a30-d175-4360-a1c0-4623c7993626,Sipporah Nyabuto,437541b0-945a-46f4-aa61-0e79530b8914,2018,11,2018-11-01,0,0,0,0,0,0
+46,Gucha/nyanseraI,Kisii,Bomachoge chache,Ogembo,Nyaisero,2eda8a30-d175-4360-a1c0-4623c7993626,Sipporah Nyabuto,437541b0-945a-46f4-aa61-0e79530b8914,2018,12,2018-12-01,0,0,0,0,0,0
+47,Gucha/nyanseraI,Kisii,Bomachoge chache,Ogembo,Nyaisero,2eda8a30-d175-4360-a1c0-4623c7993626,Sipporah Nyabuto,437541b0-945a-46f4-aa61-0e79530b8914,2019,1,2019-01-01,0,0,0,0,0,0
+48,Itare,Kisii,Bomachoge chache,Ogembo,Nyansakia,3069c0e3-d530-407b-ad23-c46066b66538,Penina Moraa Manono,baa3128d-31c5-47f9-a567-c8fb25c327da,2018,11,2018-11-01,0,0,0,0,6,0
+49,Itare,Kisii,Bomachoge chache,Ogembo,Nyansakia,3069c0e3-d530-407b-ad23-c46066b66538,Penina Moraa Manono,baa3128d-31c5-47f9-a567-c8fb25c327da,2018,12,2018-12-01,0,0,0,0,9,0
+50,Itare,Kisii,Bomachoge chache,Ogembo,Nyansakia,3069c0e3-d530-407b-ad23-c46066b66538,Penina Moraa Manono,baa3128d-31c5-47f9-a567-c8fb25c327da,2019,1,2019-01-01,0,0,0,0,3,0
+51,Sani A,Kisii,Bomachoge chache,Ogembo,Motongo,32ebb3a9-3b1d-4208-87d9-0b36cc25a2a9,Magret Bokea,bf3ea57d-5e16-4ef2-a7e7-3b7b7a11368f,2018,11,2018-11-01,0,0,0,0,9,4
+52,Sani A,Kisii,Bomachoge chache,Ogembo,Motongo,32ebb3a9-3b1d-4208-87d9-0b36cc25a2a9,Magret Bokea,bf3ea57d-5e16-4ef2-a7e7-3b7b7a11368f,2018,12,2018-12-01,0,0,4,4,11,2
+53,Sani A,Kisii,Bomachoge chache,Ogembo,Motongo,32ebb3a9-3b1d-4208-87d9-0b36cc25a2a9,Magret Bokea,bf3ea57d-5e16-4ef2-a7e7-3b7b7a11368f,2019,1,2019-01-01,0,0,0,0,6,0
+54,Kimai/Rianyansera,Kisii,Bomachoge chache,Ogembo,Nyaisero,3abfdc43-fbdf-4099-9c59-365dfb3e5130,Josebella Muchai Nyanchama,3a1a4da3-61b2-4e91-9fca-5ecb2e4a4fd6,2018,11,2018-11-01,0,0,2,2,4,4
+55,Kimai/Rianyansera,Kisii,Bomachoge chache,Ogembo,Nyaisero,3abfdc43-fbdf-4099-9c59-365dfb3e5130,Josebella Muchai Nyanchama,3a1a4da3-61b2-4e91-9fca-5ecb2e4a4fd6,2018,12,2018-12-01,0,0,2,1,4,4
+56,Kimai/Rianyansera,Kisii,Bomachoge chache,Ogembo,Nyaisero,3abfdc43-fbdf-4099-9c59-365dfb3e5130,Josebella Muchai Nyanchama,3a1a4da3-61b2-4e91-9fca-5ecb2e4a4fd6,2019,1,2019-01-01,0,0,1,0,2,2
+57,Esoko,Kisii,Bomachoge chache,Ogembo,Nyansakia,3e24c2ef-39c8-4bd2-83b5-e91a0fb9414e,Mackline Nyanchama Moreka,6b21db6f-07e1-40be-aeb7-0afdb94648c3,2018,11,2018-11-01,0,0,0,0,3,0
+58,Esoko,Kisii,Bomachoge chache,Ogembo,Nyansakia,3e24c2ef-39c8-4bd2-83b5-e91a0fb9414e,Mackline Nyanchama Moreka,6b21db6f-07e1-40be-aeb7-0afdb94648c3,2018,12,2018-12-01,0,0,0,0,8,0
+59,Esoko,Kisii,Bomachoge chache,Ogembo,Nyansakia,3e24c2ef-39c8-4bd2-83b5-e91a0fb9414e,Mackline Nyanchama Moreka,6b21db6f-07e1-40be-aeb7-0afdb94648c3,2019,1,2019-01-01,0,0,0,0,4,0
+60,Kebabe,Kisii,Bomachoge chache,Ogembo,Nyansakia,3e48d821-2ab0-4e81-9d29-90e30c58e20c,Winfrida Kerubo Mogusu,46d1e90d-abbf-4dec-9db8-6a71ef36834b,2018,11,2018-11-01,0,0,0,0,1,1
+61,Kebabe,Kisii,Bomachoge chache,Ogembo,Nyansakia,3e48d821-2ab0-4e81-9d29-90e30c58e20c,Winfrida Kerubo Mogusu,46d1e90d-abbf-4dec-9db8-6a71ef36834b,2018,12,2018-12-01,0,0,0,0,2,2
+62,Kebabe,Kisii,Bomachoge chache,Ogembo,Nyansakia,3e48d821-2ab0-4e81-9d29-90e30c58e20c,Winfrida Kerubo Mogusu,46d1e90d-abbf-4dec-9db8-6a71ef36834b,2019,1,2019-01-01,0,0,0,0,1,0
+63,Machongo A,Kisii,Bomachoge chache,Ogembo,Motongo,42b7b32a-6321-4547-ab40-56574b24fd5f,Josephine Nyanchama Ondabu,509d3d0f-88d3-477f-8170-d4f6f423967d,2018,11,2018-11-01,0,0,0,0,14,0
+64,Machongo A,Kisii,Bomachoge chache,Ogembo,Motongo,42b7b32a-6321-4547-ab40-56574b24fd5f,Josephine Nyanchama Ondabu,509d3d0f-88d3-477f-8170-d4f6f423967d,2018,12,2018-12-01,0,0,0,0,14,2
+65,Machongo A,Kisii,Bomachoge chache,Ogembo,Motongo,42b7b32a-6321-4547-ab40-56574b24fd5f,Josephine Nyanchama Ondabu,509d3d0f-88d3-477f-8170-d4f6f423967d,2019,1,2019-01-01,0,0,0,0,6,0
+66,Bomwamu B,Kisii,Bomachoge chache,Ogembo,Motongo,471e40d0-2336-4a18-a51a-97ca4e9e6774,Sipora Manyange,3214cd40-2f46-4b7d-a796-89b88df4ad31,2018,11,2018-11-01,0,0,0,0,4,0
+67,Bomwamu B,Kisii,Bomachoge chache,Ogembo,Motongo,471e40d0-2336-4a18-a51a-97ca4e9e6774,Sipora Manyange,3214cd40-2f46-4b7d-a796-89b88df4ad31,2018,12,2018-12-01,0,0,0,0,2,0
+68,Bomwamu B,Kisii,Bomachoge chache,Ogembo,Motongo,471e40d0-2336-4a18-a51a-97ca4e9e6774,Sipora Manyange,3214cd40-2f46-4b7d-a796-89b88df4ad31,2019,1,2019-01-01,0,0,0,0,0,0
+69,Rionkoro/nyaendaI,Kisii,Bomachoge chache,Ogembo,Nyaisero,489f183f-d5db-4b74-add4-7cc86899077d,Ednah Kwamboka Mochire,a596b699-b7a5-4d9c-bd8b-174e7befdb26,2018,11,2018-11-01,0,0,0,0,0,0
+70,Rionkoro/nyaendaI,Kisii,Bomachoge chache,Ogembo,Nyaisero,489f183f-d5db-4b74-add4-7cc86899077d,Ednah Kwamboka Mochire,a596b699-b7a5-4d9c-bd8b-174e7befdb26,2018,12,2018-12-01,0,0,4,0,0,0
+71,Rionkoro/nyaendaI,Kisii,Bomachoge chache,Ogembo,Nyaisero,489f183f-d5db-4b74-add4-7cc86899077d,Ednah Kwamboka Mochire,a596b699-b7a5-4d9c-bd8b-174e7befdb26,2019,1,2019-01-01,0,0,0,0,0,0
+72,Bomoseri,Kisii,Bomachoge chache,Ogembo,Kineni,4b98f6c1-03b6-4045-a0b1-9691116a9d11,Gladys Osoro,1e038c6c-4a02-4173-afd3-61c6b559ce7b,2018,11,2018-11-01,0,0,0,0,16,0
+73,Bomoseri,Kisii,Bomachoge chache,Ogembo,Kineni,4b98f6c1-03b6-4045-a0b1-9691116a9d11,Gladys Osoro,1e038c6c-4a02-4173-afd3-61c6b559ce7b,2018,12,2018-12-01,0,0,0,0,14,0
+74,Bomoseri,Kisii,Bomachoge chache,Ogembo,Kineni,4b98f6c1-03b6-4045-a0b1-9691116a9d11,Gladys Osoro,1e038c6c-4a02-4173-afd3-61c6b559ce7b,2019,1,2019-01-01,0,0,0,0,6,0
+75,Rionchogu I,Kisii,Bomachoge chache,Ogembo,Nyaisero,4d63b14d-196e-4995-a0d6-900a4b78197e,Rebecca Kerubo Nyabuto,6c56ebbe-e11a-4897-a72f-e6160cacfea4,2018,11,2018-11-01,0,0,0,0,1,0
+76,Rionchogu I,Kisii,Bomachoge chache,Ogembo,Nyaisero,4d63b14d-196e-4995-a0d6-900a4b78197e,Rebecca Kerubo Nyabuto,6c56ebbe-e11a-4897-a72f-e6160cacfea4,2018,12,2018-12-01,0,0,0,0,4,0
+77,Rionchogu I,Kisii,Bomachoge chache,Ogembo,Nyaisero,4d63b14d-196e-4995-a0d6-900a4b78197e,Rebecca Kerubo Nyabuto,6c56ebbe-e11a-4897-a72f-e6160cacfea4,2019,1,2019-01-01,0,0,0,0,1,0
+78,Bonenti,Kisii,Bomachoge chache,Ogembo,Misesi,4fab3b81-1f1d-439a-bcd4-d0256dc4205d,Gladys Omari,2e4611da-a540-495b-b99b-aea7254c4a7d,2018,11,2018-11-01,0,0,0,0,4,0
+79,Bonenti,Kisii,Bomachoge chache,Ogembo,Misesi,4fab3b81-1f1d-439a-bcd4-d0256dc4205d,Gladys Omari,2e4611da-a540-495b-b99b-aea7254c4a7d,2018,12,2018-12-01,0,0,0,0,6,0
+80,Bonenti,Kisii,Bomachoge chache,Ogembo,Misesi,4fab3b81-1f1d-439a-bcd4-d0256dc4205d,Gladys Omari,2e4611da-a540-495b-b99b-aea7254c4a7d,2019,1,2019-01-01,0,0,0,0,3,0
+81,Tendere,Kisii,Bomachoge chache,Ogembo,Nyansakia,4fe84f6e-3cfe-4fe5-b73b-af61e68b324b,Stella Otwere,2e664a13-81cb-4f2f-9741-ddee80d44ae4,2018,11,2018-11-01,0,0,0,0,2,0
+82,Tendere,Kisii,Bomachoge chache,Ogembo,Nyansakia,4fe84f6e-3cfe-4fe5-b73b-af61e68b324b,Stella Otwere,2e664a13-81cb-4f2f-9741-ddee80d44ae4,2018,12,2018-12-01,0,0,0,0,2,0
+83,Tendere,Kisii,Bomachoge chache,Ogembo,Nyansakia,4fe84f6e-3cfe-4fe5-b73b-af61e68b324b,Stella Otwere,2e664a13-81cb-4f2f-9741-ddee80d44ae4,2019,1,2019-01-01,0,0,0,0,1,0
+84,Nyagundo,Kisii,Bomachoge chache,Ogembo,Nyaisero,52b4ed75-15e1-4a98-93e6-0cf007da45e4,Hebron Ombaso,f4a31e58-2910-413f-8073-8a2eb9475e34,2018,11,2018-11-01,0,0,0,0,0,0
+85,Nyagundo,Kisii,Bomachoge chache,Ogembo,Nyaisero,52b4ed75-15e1-4a98-93e6-0cf007da45e4,Hebron Ombaso,f4a31e58-2910-413f-8073-8a2eb9475e34,2018,12,2018-12-01,0,0,0,0,1,1
+86,Nyagundo,Kisii,Bomachoge chache,Ogembo,Nyaisero,52b4ed75-15e1-4a98-93e6-0cf007da45e4,Hebron Ombaso,f4a31e58-2910-413f-8073-8a2eb9475e34,2019,1,2019-01-01,0,0,0,0,1,1
+87,Rionde,Kisii,Bomachoge chache,Ogembo,Kineni,5681b9f2-5322-4cd0-bd66-c4bc30c6da7c,Daniel Onyancha,c87a9584-9d81-46a3-afb1-e876f575e5bc,2018,11,2018-11-01,2,0,3,0,73,8
+88,Rionde,Kisii,Bomachoge chache,Ogembo,Kineni,5681b9f2-5322-4cd0-bd66-c4bc30c6da7c,Daniel Onyancha,c87a9584-9d81-46a3-afb1-e876f575e5bc,2018,12,2018-12-01,0,0,0,0,61,8
+89,Rionde,Kisii,Bomachoge chache,Ogembo,Kineni,5681b9f2-5322-4cd0-bd66-c4bc30c6da7c,Daniel Onyancha,c87a9584-9d81-46a3-afb1-e876f575e5bc,2019,1,2019-01-01,0,0,0,0,30,0
+90,Riasoiywa,Kisii,Bomachoge chache,Ogembo,Nyansakia,5d5501c1-0f86-45c2-b937-d336d2101130,Asenath Kerubo Nyangares,5502d011-b0cd-4fb9-8754-c5637494a9fb,2018,11,2018-11-01,3,0,0,0,5,0
+91,Riasoiywa,Kisii,Bomachoge chache,Ogembo,Nyansakia,5d5501c1-0f86-45c2-b937-d336d2101130,Asenath Kerubo Nyangares,5502d011-b0cd-4fb9-8754-c5637494a9fb,2018,12,2018-12-01,4,0,2,2,2,0
+92,Riasoiywa,Kisii,Bomachoge chache,Ogembo,Nyansakia,5d5501c1-0f86-45c2-b937-d336d2101130,Asenath Kerubo Nyangares,5502d011-b0cd-4fb9-8754-c5637494a9fb,2019,1,2019-01-01,0,0,0,0,0,0
+93,Bokienge B,Kisii,Bomachoge chache,Ogembo,Motongo,65613308-039e-4067-9361-97cc354464cd,Pricillah Kemunto,fd47131f-ec7c-4382-9a3b-8216c899e0e9,2018,11,2018-11-01,0,0,0,0,6,0
+94,Bokienge B,Kisii,Bomachoge chache,Ogembo,Motongo,65613308-039e-4067-9361-97cc354464cd,Pricillah Kemunto,fd47131f-ec7c-4382-9a3b-8216c899e0e9,2018,12,2018-12-01,0,0,0,0,7,0
+95,Bokienge B,Kisii,Bomachoge chache,Ogembo,Motongo,65613308-039e-4067-9361-97cc354464cd,Pricillah Kemunto,fd47131f-ec7c-4382-9a3b-8216c899e0e9,2019,1,2019-01-01,0,0,0,0,3,0
+96,Etago,Kisii,Bomachoge chache,Ogembo,Nyaisero,66752c1a-5f95-42ee-bf52-405b61ef932d,Beatrice Aboki,b8fd133e-528b-4d12-911c-51ab94cf40cd,2018,11,2018-11-01,0,0,6,2,7,0
+97,Etago,Kisii,Bomachoge chache,Ogembo,Nyaisero,66752c1a-5f95-42ee-bf52-405b61ef932d,Beatrice Aboki,b8fd133e-528b-4d12-911c-51ab94cf40cd,2018,12,2018-12-01,0,0,2,0,7,2
+98,Etago,Kisii,Bomachoge chache,Ogembo,Nyaisero,66752c1a-5f95-42ee-bf52-405b61ef932d,Beatrice Aboki,b8fd133e-528b-4d12-911c-51ab94cf40cd,2019,1,2019-01-01,0,0,0,0,3,0
+99,Nyamasege II,Kisii,Bomachoge chache,Ogembo,Kineni,69d2d27d-0c0a-4acc-9c11-a36b6cdb2490,David Kenyanya Onyancha,c5e16dc8-a113-44bc-8ddf-1a9991bff804,2018,11,2018-11-01,0,0,2,0,3,1
+100,Nyamasege II,Kisii,Bomachoge chache,Ogembo,Kineni,69d2d27d-0c0a-4acc-9c11-a36b6cdb2490,David Kenyanya Onyancha,c5e16dc8-a113-44bc-8ddf-1a9991bff804,2018,12,2018-12-01,0,0,3,1,6,2
+101,Nyamasege II,Kisii,Bomachoge chache,Ogembo,Kineni,69d2d27d-0c0a-4acc-9c11-a36b6cdb2490,David Kenyanya Onyancha,c5e16dc8-a113-44bc-8ddf-1a9991bff804,2019,1,2019-01-01,0,0,1,0,3,1
+102,Machongo C,Kisii,Bomachoge chache,Ogembo,Motongo,73240f73-2e09-4ed3-bc7f-13d9c6f6fe82,Jane Kwamboka Asha,99cd3beb-11d4-4bb9-92d8-1edc7ecff0ee,2018,11,2018-11-01,3,0,0,0,5,0
+103,Machongo C,Kisii,Bomachoge chache,Ogembo,Motongo,73240f73-2e09-4ed3-bc7f-13d9c6f6fe82,Jane Kwamboka Asha,99cd3beb-11d4-4bb9-92d8-1edc7ecff0ee,2018,12,2018-12-01,5,0,2,1,1,0
+104,Machongo C,Kisii,Bomachoge chache,Ogembo,Motongo,73240f73-2e09-4ed3-bc7f-13d9c6f6fe82,Jane Kwamboka Asha,99cd3beb-11d4-4bb9-92d8-1edc7ecff0ee,2019,1,2019-01-01,0,0,0,0,4,0
+105,Kebabe,Kisii,Bomachoge chache,Ogembo,Motongo,756e3d57-d472-48c4-bb06-bcc963c6165c,Isabella Kwamboka Ombworu,7cfa678f-e7ce-491a-9ba8-9fd8ba82b1c2,2018,11,2018-11-01,0,0,0,0,6,0
+106,Kebabe,Kisii,Bomachoge chache,Ogembo,Motongo,756e3d57-d472-48c4-bb06-bcc963c6165c,Isabella Kwamboka Ombworu,7cfa678f-e7ce-491a-9ba8-9fd8ba82b1c2,2018,12,2018-12-01,0,0,0,0,6,1
+107,Kebabe,Kisii,Bomachoge chache,Ogembo,Motongo,756e3d57-d472-48c4-bb06-bcc963c6165c,Isabella Kwamboka Ombworu,7cfa678f-e7ce-491a-9ba8-9fd8ba82b1c2,2019,1,2019-01-01,0,0,0,0,2,0
+108,EburiII,Kisii,Bomachoge chache,Ogembo,Nyamasege,7b6e211e-c6b2-4df1-8e06-124e7a9b5734,Eunike Nyaata,47fff513-714c-4d1c-aea1-d14318301a08,2018,11,2018-11-01,0,0,2,2,2,1
+109,EburiII,Kisii,Bomachoge chache,Ogembo,Nyamasege,7b6e211e-c6b2-4df1-8e06-124e7a9b5734,Eunike Nyaata,47fff513-714c-4d1c-aea1-d14318301a08,2018,12,2018-12-01,0,0,2,0,7,1
+110,EburiII,Kisii,Bomachoge chache,Ogembo,Nyamasege,7b6e211e-c6b2-4df1-8e06-124e7a9b5734,Eunike Nyaata,47fff513-714c-4d1c-aea1-d14318301a08,2019,1,2019-01-01,0,0,0,0,5,0
+111,Eboe,Kisii,Bomachoge chache,Ogembo,Misesi,8384ed29-e2a6-434e-87d2-dbe57d16935b,Stella Nyasete,3a307307-7766-4fa4-a087-161001aa9701,2018,11,2018-11-01,0,0,0,0,1,0
+112,Eboe,Kisii,Bomachoge chache,Ogembo,Misesi,8384ed29-e2a6-434e-87d2-dbe57d16935b,Stella Nyasete,3a307307-7766-4fa4-a087-161001aa9701,2018,12,2018-12-01,0,0,0,0,3,1
+113,Eboe,Kisii,Bomachoge chache,Ogembo,Misesi,8384ed29-e2a6-434e-87d2-dbe57d16935b,Stella Nyasete,3a307307-7766-4fa4-a087-161001aa9701,2019,1,2019-01-01,0,0,0,0,2,0
+114,Eburi III,Kisii,Bomachoge chache,Ogembo,Nyaisero,854856c9-f27d-4077-987a-e94555482002,Linet Nyambeki George,893cb1a1-669d-4159-9cd5-ae90b5c13400,2018,11,2018-11-01,0,0,2,0,4,4
+115,Eburi III,Kisii,Bomachoge chache,Ogembo,Nyaisero,854856c9-f27d-4077-987a-e94555482002,Linet Nyambeki George,893cb1a1-669d-4159-9cd5-ae90b5c13400,2018,12,2018-12-01,0,0,6,4,8,6
+116,Eburi III,Kisii,Bomachoge chache,Ogembo,Nyaisero,854856c9-f27d-4077-987a-e94555482002,Linet Nyambeki George,893cb1a1-669d-4159-9cd5-ae90b5c13400,2019,1,2019-01-01,0,0,0,0,4,0
+117,Nyansara1,Kisii,Bomachoge chache,Ogembo,Nyaisero,86d268f6-81a9-4fec-b598-a1d197ee9eb4,Silvester Onyando,b3edcefd-6801-47ba-bd2d-947ceb35c728,2018,11,2018-11-01,0,0,1,1,5,1
+118,Nyansara1,Kisii,Bomachoge chache,Ogembo,Nyaisero,86d268f6-81a9-4fec-b598-a1d197ee9eb4,Silvester Onyando,b3edcefd-6801-47ba-bd2d-947ceb35c728,2018,12,2018-12-01,0,0,1,1,8,4
+119,Nyansara1,Kisii,Bomachoge chache,Ogembo,Nyaisero,86d268f6-81a9-4fec-b598-a1d197ee9eb4,Silvester Onyando,b3edcefd-6801-47ba-bd2d-947ceb35c728,2019,1,2019-01-01,0,0,0,0,5,4
+120,Matongo,Kisii,Bomachoge chache,Ogembo,Motongo,86e48254-294e-48bf-99b5-977ddcf15f4d,Leonida Juma,1b1b8b07-1c34-49fd-8b08-c5732c06d33e,2018,11,2018-11-01,0,0,0,0,4,0
+121,Matongo,Kisii,Bomachoge chache,Ogembo,Motongo,86e48254-294e-48bf-99b5-977ddcf15f4d,Leonida Juma,1b1b8b07-1c34-49fd-8b08-c5732c06d33e,2018,12,2018-12-01,0,0,4,1,5,0
+122,Matongo,Kisii,Bomachoge chache,Ogembo,Motongo,86e48254-294e-48bf-99b5-977ddcf15f4d,Leonida Juma,1b1b8b07-1c34-49fd-8b08-c5732c06d33e,2019,1,2019-01-01,0,0,0,0,2,0
+123,Makonge,Kisii,Bomachoge chache,Ogembo,Nyaisero,888f875f-be2b-429d-a30f-83b05bd60f1a,Naphtali Isaboke,64c376bc-6ed9-45bc-9fc8-5a5a0b4e6937,2018,11,2018-11-01,0,0,0,0,6,0
+124,Makonge,Kisii,Bomachoge chache,Ogembo,Nyaisero,888f875f-be2b-429d-a30f-83b05bd60f1a,Naphtali Isaboke,64c376bc-6ed9-45bc-9fc8-5a5a0b4e6937,2018,12,2018-12-01,0,0,0,0,4,0
+125,Makonge,Kisii,Bomachoge chache,Ogembo,Nyaisero,888f875f-be2b-429d-a30f-83b05bd60f1a,Naphtali Isaboke,64c376bc-6ed9-45bc-9fc8-5a5a0b4e6937,2019,1,2019-01-01,0,0,0,0,2,0
+126,Riakongera II,Kisii,Bomachoge chache,Ogembo,Nyaisero,959db348-fdfa-4eba-b906-8e96c3262c22,Peter Kariuki,33850efc-ae02-4126-8c16-f5159ccd3997,2018,11,2018-11-01,0,0,4,0,20,1
+127,Riakongera II,Kisii,Bomachoge chache,Ogembo,Nyaisero,959db348-fdfa-4eba-b906-8e96c3262c22,Peter Kariuki,33850efc-ae02-4126-8c16-f5159ccd3997,2018,12,2018-12-01,2,0,4,0,24,4
+128,Riakongera II,Kisii,Bomachoge chache,Ogembo,Nyaisero,959db348-fdfa-4eba-b906-8e96c3262c22,Peter Kariuki,33850efc-ae02-4126-8c16-f5159ccd3997,2019,1,2019-01-01,0,0,0,0,10,0
+129,Bonyakanda,Kisii,Bomachoge chache,Ogembo,Nyansakia,9bda4073-b8b7-4cc2-83c4-5a5f19e76c6a,Ruth Nyandwaro,33f11a12-b85e-49ef-a6f3-66743d2ea5f7,2018,11,2018-11-01,0,0,0,0,0,0
+130,Bonyakanda,Kisii,Bomachoge chache,Ogembo,Nyansakia,9bda4073-b8b7-4cc2-83c4-5a5f19e76c6a,Ruth Nyandwaro,33f11a12-b85e-49ef-a6f3-66743d2ea5f7,2018,12,2018-12-01,0,0,0,0,0,0
+131,Bonyakanda,Kisii,Bomachoge chache,Ogembo,Nyansakia,9bda4073-b8b7-4cc2-83c4-5a5f19e76c6a,Ruth Nyandwaro,33f11a12-b85e-49ef-a6f3-66743d2ea5f7,2019,1,2019-01-01,0,0,0,0,0,0
+132,Nyarenda III,Kisii,Bomachoge chache,Ogembo,Nyaisero,a270c045-f179-47a6-b196-fb14755e52b8,Mirriam Bosibori Makori,64d448d3-f972-4838-b1cf-a086c8067d94,2018,11,2018-11-01,0,0,2,0,0,0
+133,Nyarenda III,Kisii,Bomachoge chache,Ogembo,Nyaisero,a270c045-f179-47a6-b196-fb14755e52b8,Mirriam Bosibori Makori,64d448d3-f972-4838-b1cf-a086c8067d94,2018,12,2018-12-01,0,0,0,0,0,0
+134,Nyarenda III,Kisii,Bomachoge chache,Ogembo,Nyaisero,a270c045-f179-47a6-b196-fb14755e52b8,Mirriam Bosibori Makori,64d448d3-f972-4838-b1cf-a086c8067d94,2019,1,2019-01-01,0,0,0,0,0,0
+135,Mobondo,Kisii,Bomachoge chache,Ogembo,Kineni,a4c7c219-72b2-4a8c-a26d-ff6a93b051bd,Mary Oronyi,519df907-0d31-454f-996e-97e7df3bd9a5,2018,11,2018-11-01,0,0,0,0,6,4
+136,Mobondo,Kisii,Bomachoge chache,Ogembo,Kineni,a4c7c219-72b2-4a8c-a26d-ff6a93b051bd,Mary Oronyi,519df907-0d31-454f-996e-97e7df3bd9a5,2018,12,2018-12-01,0,0,0,0,8,4
+137,Mobondo,Kisii,Bomachoge chache,Ogembo,Kineni,a4c7c219-72b2-4a8c-a26d-ff6a93b051bd,Mary Oronyi,519df907-0d31-454f-996e-97e7df3bd9a5,2019,1,2019-01-01,0,0,0,0,5,0
+138,Mobondo2,Kisii,Bomachoge chache,Ogembo,Kineni,a6141e58-7429-4be8-bb2e-62bc70993a33,Jared Isinta,71020b6b-8aef-4129-9c59-43c928098668,2018,11,2018-11-01,0,0,1,0,15,0
+139,Mobondo2,Kisii,Bomachoge chache,Ogembo,Kineni,a6141e58-7429-4be8-bb2e-62bc70993a33,Jared Isinta,71020b6b-8aef-4129-9c59-43c928098668,2018,12,2018-12-01,0,0,0,0,9,0
+140,Mobondo2,Kisii,Bomachoge chache,Ogembo,Kineni,a6141e58-7429-4be8-bb2e-62bc70993a33,Jared Isinta,71020b6b-8aef-4129-9c59-43c928098668,2019,1,2019-01-01,0,0,0,0,3,0
+141,Omoringamu,Kisii,Bomachoge chache,Ogembo,Nyansakia,af232677-8311-4e42-969f-d58b00a1e2ed,Thomas Osoro Omayio,b94a867d-7f36-432c-9e52-a97a25b99ed6,2018,11,2018-11-01,0,0,0,0,0,0
+142,Omoringamu,Kisii,Bomachoge chache,Ogembo,Nyansakia,af232677-8311-4e42-969f-d58b00a1e2ed,Thomas Osoro Omayio,b94a867d-7f36-432c-9e52-a97a25b99ed6,2018,12,2018-12-01,0,0,2,1,2,2
+143,Omoringamu,Kisii,Bomachoge chache,Ogembo,Nyansakia,af232677-8311-4e42-969f-d58b00a1e2ed,Thomas Osoro Omayio,b94a867d-7f36-432c-9e52-a97a25b99ed6,2019,1,2019-01-01,0,0,1,0,2,2
+144,Bongerecha,Kisii,Bomachoge chache,Ogembo,Nyansakia,af9f3884-be5c-48d7-ab0d-e058c47dea86,Rose Bonareri,918281fe-f1a8-4603-ad51-909224e5327e,2018,11,2018-11-01,0,0,0,0,0,0
+145,Bongerecha,Kisii,Bomachoge chache,Ogembo,Nyansakia,af9f3884-be5c-48d7-ab0d-e058c47dea86,Rose Bonareri,918281fe-f1a8-4603-ad51-909224e5327e,2018,12,2018-12-01,0,0,0,0,0,0
+146,Bongerecha,Kisii,Bomachoge chache,Ogembo,Nyansakia,af9f3884-be5c-48d7-ab0d-e058c47dea86,Rose Bonareri,918281fe-f1a8-4603-ad51-909224e5327e,2019,1,2019-01-01,0,0,0,0,1,0
+147,Kebabe,Kisii,Bomachoge chache,Ogembo,Motongo,b113f15c-3106-44cd-803a-1f8a52d935c4,Agnes Nyaboke,d23e3c17-37f2-4073-9cf5-af26abcb6fe9,2018,11,2018-11-01,0,0,0,0,0,0
+148,Kebabe,Kisii,Bomachoge chache,Ogembo,Motongo,b113f15c-3106-44cd-803a-1f8a52d935c4,Agnes Nyaboke,d23e3c17-37f2-4073-9cf5-af26abcb6fe9,2018,12,2018-12-01,0,0,0,0,0,0
+149,Kebabe,Kisii,Bomachoge chache,Ogembo,Motongo,b113f15c-3106-44cd-803a-1f8a52d935c4,Agnes Nyaboke,d23e3c17-37f2-4073-9cf5-af26abcb6fe9,2019,1,2019-01-01,0,0,0,0,0,0
+150,Nyagenge,Kisii,Bomachoge chache,Ogembo,Misesi,b3b6d286-e33d-477d-a160-df978b28eecd,Fridah Nyabiage Aguta,810037f2-3a85-4981-a7bf-8ab4e6b688b5,2018,11,2018-11-01,0,0,2,1,6,3
+151,Nyagenge,Kisii,Bomachoge chache,Ogembo,Misesi,b3b6d286-e33d-477d-a160-df978b28eecd,Fridah Nyabiage Aguta,810037f2-3a85-4981-a7bf-8ab4e6b688b5,2018,12,2018-12-01,0,0,0,0,9,2
+152,Nyagenge,Kisii,Bomachoge chache,Ogembo,Misesi,b3b6d286-e33d-477d-a160-df978b28eecd,Fridah Nyabiage Aguta,810037f2-3a85-4981-a7bf-8ab4e6b688b5,2019,1,2019-01-01,0,0,0,0,3,0
+153,Ketacho,Kisii,Bomachoge chache,Ogembo,Nyaisero,b7d6a7c9-9233-4d68-9757-1e03c8227311,Moses Yeye,703d859e-2655-4bb2-862b-eb134a1db9b0,2018,11,2018-11-01,0,0,2,2,4,0
+154,Ketacho,Kisii,Bomachoge chache,Ogembo,Nyaisero,b7d6a7c9-9233-4d68-9757-1e03c8227311,Moses Yeye,703d859e-2655-4bb2-862b-eb134a1db9b0,2018,12,2018-12-01,0,0,1,1,3,0
+155,Ketacho,Kisii,Bomachoge chache,Ogembo,Nyaisero,b7d6a7c9-9233-4d68-9757-1e03c8227311,Moses Yeye,703d859e-2655-4bb2-862b-eb134a1db9b0,2019,1,2019-01-01,0,0,0,0,0,0
+156,Mananasi1,Kisii,Bomachoge chache,Ogembo,Nyansakia,b879af21-733f-4169-9902-441098b0e08f,Sara Nyanchama Menda,ebf7d48c-91e1-4caa-b6ae-0978f3f9a71e,2018,11,2018-11-01,0,0,0,0,2,0
+157,Mananasi1,Kisii,Bomachoge chache,Ogembo,Nyansakia,b879af21-733f-4169-9902-441098b0e08f,Sara Nyanchama Menda,ebf7d48c-91e1-4caa-b6ae-0978f3f9a71e,2018,12,2018-12-01,0,0,0,0,4,2
+158,Mananasi1,Kisii,Bomachoge chache,Ogembo,Nyansakia,b879af21-733f-4169-9902-441098b0e08f,Sara Nyanchama Menda,ebf7d48c-91e1-4caa-b6ae-0978f3f9a71e,2019,1,2019-01-01,0,0,0,0,3,0
+159,Rikura,Kisii,Bomachoge chache,Ogembo,Motongo,bfc62d91-f66b-43a1-b456-bc0c7f3e3cba,Alice Kwamboka,8b730a2f-dd21-4823-9caf-2c364756da1a,2018,11,2018-11-01,0,0,1,1,3,0
+160,Rikura,Kisii,Bomachoge chache,Ogembo,Motongo,bfc62d91-f66b-43a1-b456-bc0c7f3e3cba,Alice Kwamboka,8b730a2f-dd21-4823-9caf-2c364756da1a,2018,12,2018-12-01,0,0,2,2,1,1
+161,Rikura,Kisii,Bomachoge chache,Ogembo,Motongo,bfc62d91-f66b-43a1-b456-bc0c7f3e3cba,Alice Kwamboka,8b730a2f-dd21-4823-9caf-2c364756da1a,2019,1,2019-01-01,0,0,0,0,2,2
+162,Rianyakwara,Kisii,Bomachoge chache,Ogembo,Nyaisero,c3d60987-13cd-4cd2-8f5b-55c29bc2c58c,Roseline Nyandwaro,677403ca-fdfb-4e66-9c8c-4d07065d8aa1,2018,11,2018-11-01,0,0,0,0,2,0
+163,Rianyakwara,Kisii,Bomachoge chache,Ogembo,Nyaisero,c3d60987-13cd-4cd2-8f5b-55c29bc2c58c,Roseline Nyandwaro,677403ca-fdfb-4e66-9c8c-4d07065d8aa1,2018,12,2018-12-01,0,0,0,0,1,1
+164,Rianyakwara,Kisii,Bomachoge chache,Ogembo,Nyaisero,c3d60987-13cd-4cd2-8f5b-55c29bc2c58c,Roseline Nyandwaro,677403ca-fdfb-4e66-9c8c-4d07065d8aa1,2019,1,2019-01-01,0,0,0,0,2,1
+165,Itibonge,Kisii,Bomachoge chache,Ogembo,Motongo,c400c524-3cbb-4c7e-a5bb-dbfc6870ebdd,Pamela Nyabonyi Mauti,066fcfd5-8e8a-4cfd-9390-d567f0cbfd2c,2018,11,2018-11-01,0,0,0,0,0,0
+166,Itibonge,Kisii,Bomachoge chache,Ogembo,Motongo,c400c524-3cbb-4c7e-a5bb-dbfc6870ebdd,Pamela Nyabonyi Mauti,066fcfd5-8e8a-4cfd-9390-d567f0cbfd2c,2018,12,2018-12-01,0,0,3,2,2,1
+167,Itibonge,Kisii,Bomachoge chache,Ogembo,Motongo,c400c524-3cbb-4c7e-a5bb-dbfc6870ebdd,Pamela Nyabonyi Mauti,066fcfd5-8e8a-4cfd-9390-d567f0cbfd2c,2019,1,2019-01-01,0,0,1,0,1,0
+168,Moronga,Kisii,Bomachoge chache,Ogembo,Eketondo,cbb60937-2a34-4b7e-8323-221005a2b4e6,Juliana Kerubo Munai,d493c0a6-d7c6-4f61-822c-e15249a2fe6a,2018,11,2018-11-01,0,0,1,1,7,0
+169,Moronga,Kisii,Bomachoge chache,Ogembo,Eketondo,cbb60937-2a34-4b7e-8323-221005a2b4e6,Juliana Kerubo Munai,d493c0a6-d7c6-4f61-822c-e15249a2fe6a,2018,12,2018-12-01,0,0,4,1,8,2
+170,Moronga,Kisii,Bomachoge chache,Ogembo,Eketondo,cbb60937-2a34-4b7e-8323-221005a2b4e6,Juliana Kerubo Munai,d493c0a6-d7c6-4f61-822c-e15249a2fe6a,2019,1,2019-01-01,0,0,0,0,3,0
+171,Kineni1,Kisii,Bomachoge chache,Ogembo,Kineni,ccfa4a60-edb0-400e-b829-d743b8e7bcb6,Thomas Obare,492527a6-4c42-4f47-8bde-bd490a488d15,2018,11,2018-11-01,0,0,2,1,10,0
+172,Kineni1,Kisii,Bomachoge chache,Ogembo,Kineni,ccfa4a60-edb0-400e-b829-d743b8e7bcb6,Thomas Obare,492527a6-4c42-4f47-8bde-bd490a488d15,2018,12,2018-12-01,0,0,0,0,4,0
+173,Kineni1,Kisii,Bomachoge chache,Ogembo,Kineni,ccfa4a60-edb0-400e-b829-d743b8e7bcb6,Thomas Obare,492527a6-4c42-4f47-8bde-bd490a488d15,2019,1,2019-01-01,0,0,0,0,2,0
+174,Eburi,Kisii,Bomachoge chache,Ogembo,Kineni,d040b60e-7fb2-4fdb-baa4-9951f94bc54a,Joyce Nyanchama,81ef7699-6615-42aa-9a8a-dbc74d49cc89,2018,11,2018-11-01,0,0,0,0,9,1
+175,Eburi,Kisii,Bomachoge chache,Ogembo,Kineni,d040b60e-7fb2-4fdb-baa4-9951f94bc54a,Joyce Nyanchama,81ef7699-6615-42aa-9a8a-dbc74d49cc89,2018,12,2018-12-01,0,0,0,0,10,0
+176,Eburi,Kisii,Bomachoge chache,Ogembo,Kineni,d040b60e-7fb2-4fdb-baa4-9951f94bc54a,Joyce Nyanchama,81ef7699-6615-42aa-9a8a-dbc74d49cc89,2019,1,2019-01-01,0,0,0,0,4,0
+177,Amatagaro I,Kisii,Bomachoge chache,Ogembo,Nyaisero,d2433c86-3838-4f5e-b71e-bc5da88cee14,Joyce Mwango,6224d8b0-a0b4-46af-a8df-57e367ebbffb,2018,11,2018-11-01,8,0,3,1,20,5
+178,Amatagaro I,Kisii,Bomachoge chache,Ogembo,Nyaisero,d2433c86-3838-4f5e-b71e-bc5da88cee14,Joyce Mwango,6224d8b0-a0b4-46af-a8df-57e367ebbffb,2018,12,2018-12-01,3,0,5,2,19,0
+179,Amatagaro I,Kisii,Bomachoge chache,Ogembo,Nyaisero,d2433c86-3838-4f5e-b71e-bc5da88cee14,Joyce Mwango,6224d8b0-a0b4-46af-a8df-57e367ebbffb,2019,1,2019-01-01,1,0,0,0,7,0
+180,Chinsangio,Kisii,Bomachoge chache,Ogembo,Nyansakia,d4097031-bfb4-4dc1-9f5c-c3ff35dd3831,Venerlyne Moraa,a7c8348b-9b66-4a30-a7d0-c260ff0c05cf,2018,11,2018-11-01,0,0,0,0,2,0
+181,Chinsangio,Kisii,Bomachoge chache,Ogembo,Nyansakia,d4097031-bfb4-4dc1-9f5c-c3ff35dd3831,Venerlyne Moraa,a7c8348b-9b66-4a30-a7d0-c260ff0c05cf,2018,12,2018-12-01,0,0,0,0,2,0
+182,Chinsangio,Kisii,Bomachoge chache,Ogembo,Nyansakia,d4097031-bfb4-4dc1-9f5c-c3ff35dd3831,Venerlyne Moraa,a7c8348b-9b66-4a30-a7d0-c260ff0c05cf,2019,1,2019-01-01,0,0,0,0,1,0
+183,Bokienge A,Kisii,Bomachoge chache,Ogembo,Motongo,d5ed761e-d658-44f6-b644-93c7b5227bc7,Callen Bonareri Mose,087f2f00-56b9-4c03-85a9-c75194e61bf9,2018,11,2018-11-01,0,0,0,0,5,0
+184,Bokienge A,Kisii,Bomachoge chache,Ogembo,Motongo,d5ed761e-d658-44f6-b644-93c7b5227bc7,Callen Bonareri Mose,087f2f00-56b9-4c03-85a9-c75194e61bf9,2018,12,2018-12-01,0,0,1,1,0,0
+185,Bokienge A,Kisii,Bomachoge chache,Ogembo,Motongo,d5ed761e-d658-44f6-b644-93c7b5227bc7,Callen Bonareri Mose,087f2f00-56b9-4c03-85a9-c75194e61bf9,2019,1,2019-01-01,0,0,1,0,0,0
+186,Omogunga Roche,Kisii,Bomachoge chache,Ogembo,Nyansakia,d647fc42-042f-4644-aa2e-69802bdb88e4,Ann Nyanduko Chuma,32e73a13-dc2b-414b-a6a6-51f7fee5c007,2018,11,2018-11-01,2,0,4,1,0,0
+187,Omogunga Roche,Kisii,Bomachoge chache,Ogembo,Nyansakia,d647fc42-042f-4644-aa2e-69802bdb88e4,Ann Nyanduko Chuma,32e73a13-dc2b-414b-a6a6-51f7fee5c007,2018,12,2018-12-01,0,0,0,0,3,3
+188,Omogunga Roche,Kisii,Bomachoge chache,Ogembo,Nyansakia,d647fc42-042f-4644-aa2e-69802bdb88e4,Ann Nyanduko Chuma,32e73a13-dc2b-414b-a6a6-51f7fee5c007,2019,1,2019-01-01,0,0,0,0,3,3
+189,RionchoguII,Kisii,Bomachoge chache,Ogembo,Nyaisero,dddb4f27-a1c9-4f34-993c-05adcbaf44ac,Ann Nyamoita Omoga,d9da1693-4ebc-4f2a-9c25-b6b8e9d6dea5,2018,11,2018-11-01,0,0,0,0,5,0
+190,RionchoguII,Kisii,Bomachoge chache,Ogembo,Nyaisero,dddb4f27-a1c9-4f34-993c-05adcbaf44ac,Ann Nyamoita Omoga,d9da1693-4ebc-4f2a-9c25-b6b8e9d6dea5,2018,12,2018-12-01,0,0,0,0,4,0
+191,RionchoguII,Kisii,Bomachoge chache,Ogembo,Nyaisero,dddb4f27-a1c9-4f34-993c-05adcbaf44ac,Ann Nyamoita Omoga,d9da1693-4ebc-4f2a-9c25-b6b8e9d6dea5,2019,1,2019-01-01,0,0,0,0,2,0
+192,Riogoba,Kisii,Bomachoge chache,Ogembo,Nyansakia,e0fd136f-3d19-4b92-ad41-de1c1a7ebd6d,Risper Mogoi,5c79b2b9-1e62-4929-9f41-6806be8c0004,2018,11,2018-11-01,0,0,0,0,0,0
+193,Riogoba,Kisii,Bomachoge chache,Ogembo,Nyansakia,e0fd136f-3d19-4b92-ad41-de1c1a7ebd6d,Risper Mogoi,5c79b2b9-1e62-4929-9f41-6806be8c0004,2018,12,2018-12-01,0,0,0,0,0,0
+194,Riogoba,Kisii,Bomachoge chache,Ogembo,Nyansakia,e0fd136f-3d19-4b92-ad41-de1c1a7ebd6d,Risper Mogoi,5c79b2b9-1e62-4929-9f41-6806be8c0004,2019,1,2019-01-01,0,0,0,0,0,0
+195,Mokorokonyu,Kisii,Bomachoge chache,Ogembo,Kineni,ee2fb0da-4a53-48b7-b3ad-174707e9960f,Peris Moseti,cac317d0-d551-4ef4-977a-de4b7dad70cf,2018,11,2018-11-01,0,0,0,0,4,2
+196,Mokorokonyu,Kisii,Bomachoge chache,Ogembo,Kineni,ee2fb0da-4a53-48b7-b3ad-174707e9960f,Peris Moseti,cac317d0-d551-4ef4-977a-de4b7dad70cf,2018,12,2018-12-01,0,0,0,0,5,3
+197,Mokorokonyu,Kisii,Bomachoge chache,Ogembo,Kineni,ee2fb0da-4a53-48b7-b3ad-174707e9960f,Peris Moseti,cac317d0-d551-4ef4-977a-de4b7dad70cf,2019,1,2019-01-01,0,0,0,0,3,2
+198,Genga,Kisii,Bomachoge chache,Ogembo,Eketondo,f867a1fa-09cc-480d-82a9-230f7f4be4a1,Ann Changirwa Nyangau,3137682b-ced6-405d-923e-08faae2ec78e,2018,11,2018-11-01,0,0,1,1,4,0
+199,Genga,Kisii,Bomachoge chache,Ogembo,Eketondo,f867a1fa-09cc-480d-82a9-230f7f4be4a1,Ann Changirwa Nyangau,3137682b-ced6-405d-923e-08faae2ec78e,2018,12,2018-12-01,0,0,3,2,2,1
+200,Genga,Kisii,Bomachoge chache,Ogembo,Eketondo,f867a1fa-09cc-480d-82a9-230f7f4be4a1,Ann Changirwa Nyangau,3137682b-ced6-405d-923e-08faae2ec78e,2019,1,2019-01-01,0,0,1,0,1,0

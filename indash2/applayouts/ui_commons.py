@@ -13,6 +13,8 @@ import os, base64
 
 defaultMarker = {'color': 'rgba(112, 75, 105, 0.9)' }
 
+bar_color = { 'color': ['rgba(50, 171, 96, 0.8)', 'rgba(219, 64, 82, 0.8)', 'rgba(90,90,90,0.8)'] } 
+
 ####
 ##
 ##
@@ -179,14 +181,36 @@ def get_Line_Chart_2(id, x1, x2, y1, y2, name1, name2, title=None, horizontal=Fa
 	)	
 
 
+def get_Pie_Chart(id, labels, values, title=None):
+	return dcc.Graph(id=id, className="card",
+		figure = {
+			'data': [
+				{
+					'labels': labels,
+					'values': values,
+					'type' : 'pie',	
+					'hoverinfo':'label+percent+value',
+					'textinfo':'value' , 
+					'hole': 0.4
+				}
+			],
+			'layout' : {
+				'title': title,
+				'showlegend': True,
+				'font': {"family":'Arial', "size":10}
+			}
+		}
+	)
+	
 ####
 ##
 ##
 #### 
 def plot_word_cloud( col, cname ):
 	global a
+	print("START img cname {}".format( cname ) )
 	#fname = os.getcwd() + "/output/ref-reasons-cloud.png"
-	fname = "output/ref-reasons-cloud-{}.png".format( cname )
+	fname = "output/wcloud-{}.png".format( cname )
 		
 	stop_words = STOPWORDS.union( ["CHV", "referral" ] )
     ## Translating Swahili to Eng 	
@@ -202,9 +226,10 @@ def plot_word_cloud( col, cname ):
 	
 	w.to_file( fname )
 	
+	print("FIN img fname {}".format( fname ) )
 	#return base64.b64encode(  open(fname, 'rb').read() ) #w.to_image() )
 	
-	return fname
+	return fname #"wcloud-{}.png".format( cname )
 
 
 ####

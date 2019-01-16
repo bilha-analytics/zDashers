@@ -1,6 +1,6 @@
 import dash_core_components as dcc 
 import dash_html_components as dht 
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 
 from applayouts import ui_commons 
 
@@ -29,7 +29,7 @@ def get_layout( ):
 		]),
 		
 		## row card stats
-		dht.Div(className="row", children=[ 
+		dht.Div(className="row", id ="clh-cards", children=[ 
            ui_commons.make_stats_cards_div( [], "clh-card-summaries" ) 
 		]),
 		
@@ -69,8 +69,8 @@ def register_callback(app):
     #####
     ## callbacks for card summaries
     #####
-	@app.callback(Output('clh-card-summaries', 'children'), [Input('clh-filters-id', 'value')])
-	def update_cards(ref_reason):
+	@app.callback(Output('clh-card-summaries', 'children'), [Input('clh-filters-id', 'value'), Input( 'dbloader', 'value')], [State('clh-cards', 'children')])
+	def update_cards(ref_reason, n, old):
 		db = model_commons.get_clh_data()
 		if( len( db.index) > 0):
 			if ref_reason == model_commons.var_all_reasons:
@@ -84,15 +84,15 @@ def register_callback(app):
 			
 			t2 = t.columns[3:] if ref_reason == model_commons.var_all_reasons else t.columns[1:] 
 			
-			return [ ui_commons.make_stats_card(":{} - {}:".format(c, t[c][0]) , c) for c in t2]
+			return [ ui_commons.make_stats_card(c, t[c][0]) for c in t2 ] 
 		else:
-			return [] 
+			return old #[] 
 			
 	#####
     ## callbacks for card summaries
     #####
-	@app.callback(Output('clh-r1c2', 'children'), [Input('clh-filters-id', 'value')])
-	def update_graph2_clh(ref_reason):
+	@app.callback(Output('clh-r1c2', 'children'), [Input('clh-filters-id', 'value'), Input( 'dbloader', 'value')], [State('clh-r1c2', 'children')])
+	def update_graph2_clh(ref_reason, n, old):
 		dbh = model_commons.get_clh_data()
 		if( len( dbh.index) > 0):
 			if ref_reason == model_commons.var_all_reasons:
@@ -101,15 +101,15 @@ def register_callback(app):
 				df = dbh[ dbh[model_commons.var_bucket_unit] == ref_reason]
 			d = df[ df["reason_for_referral"] != 'HIVST_Assessed' ]["reason_for_referral"].value_counts()
 
-			return get_Bar_Chart('clh-r1g2', d.index,  d, title= "HIVST Referral Reasons - {} ".format( ref_reason ), horizontal=True )
+			return ui_commons.get_Bar_Chart('clh-r1g2', d.index,  d, title= "HIVST Referral Reasons - {} ".format( ref_reason ), horizontal=True )
 		else:
-			return ui_commons.get_graph_holder('cle-r1g2')
+			return old #ui_commons.get_graph_holder('clh-r1g2')
 	
 	#####
     ## callbacks for card summaries
     #####
-	@app.callback(Output('clh-r1c3', 'children'), [Input('clh-filters-id', 'value')]) 
-	def update_graph3_clh(ref_reason):
+	@app.callback(Output('clh-r1c3', 'children'), [Input('clh-filters-id', 'value'), Input( 'dbloader', 'value')], [State('clh-r1c3', 'children')]) 
+	def update_graph3_clh(ref_reason, n, old):
 		dbh = model_commons.get_clh_data()
 		if( len( dbh.index) > 0):
 			if ref_reason == model_commons.var_all_reasons:
@@ -118,15 +118,15 @@ def register_callback(app):
 				df = dbh[ dbh[model_commons.var_bucket_unit] == ref_reason]
 			d = df["Month"].groupby(df["Month"], sort=False).count()
 			
-			return get_Line_Chart('clh-r1g3', d.index,  d, title= "Monthly - {} ".format( ref_reason ) )
+			return ui_commons.get_Line_Chart('clh-r1g3', d.index,  d, title= "Monthly - {} ".format( ref_reason ) )
 		else:
-			return ui_commons.get_graph_holder('clh-r1g3')
+			return old #ui_commons.get_graph_holder('clh-r1g3')
 	
 	#####
     ## callbacks for card summaries
     #####
-	@app.callback(Output('clh-r1c4', 'children'), [Input('clh-filters-id', 'value')]) 
-	def update_graph4_clh(ref_reason):
+	@app.callback(Output('clh-r1c4', 'children'), [Input('clh-filters-id', 'value'), Input( 'dbloader', 'value')], [State('clh-r1c4', 'children')]) 
+	def update_graph4_clh(ref_reason, n, old):
 		dbh = model_commons.get_clh_data()
 		if( len( dbh.index) > 0):
 			if ref_reason == model_commons.var_all_reasons:
@@ -134,7 +134,17 @@ def register_callback(app):
 			else:
 				df = dbh[ dbh[model_commons.var_bucket_unit] == ref_reason]
 			d = df["health_facility_confirmation"].value_counts() 
-			return get_Pie_Chart('clh-r1g4', d.index,  d, title = "Facility Confirmation - {}".format(ref_reason ) )
+			return ui_commons.get_Pie_Chart('clh-r1g4', d.index,  d, title = "Facility Confirmation - {}".format(ref_reason ) )
 		else:
-			return ui_commons.get_graph_holder('clh-r1g4')
+			return old #ui_commons.get_graph_holder('clh-r1g4')
+	
+	
+	@app.callback(Output('clh-r1c1', 'children'), [Input( 'dbloader', 'value')], [State('clh-r1c1', 'children')])
+	def first_load_clh(n, old):
+		db = model_commons.get_clh_data()
+		if( len( db.index) > 0):
+			d = db[model_commons.var_bucket_reasons].value_counts()
+			return ui_commons.get_Bar_Chart('clh-r1g1', d.index,  d,  horizontal=True, title="All HIVST Assessments", marker=ui_commons.bar_color )
+		else: 
+			return old
 

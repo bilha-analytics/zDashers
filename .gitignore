@@ -1,0 +1,5 @@
+indash
+*.pyc
+.DS_Store
+.env
+uwords_ignore

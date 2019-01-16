@@ -1,9 +1,12 @@
 import dash_core_components as dcc 
 import dash_html_components as dht 
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 
 from applayouts import ui_commons 
 from appmodel import model_commons 
+from appmodel.utils import lazy_logger
+
+from appmodel.model_commons import * 
 
 ####
 ##
@@ -11,6 +14,7 @@ from appmodel import model_commons
 ####
 def get_layout( ):
 	zstart, zend, ztot = model_commons.get_cle_duration_details()
+	
 	return dht.Div(id='body-container', className="content-wrapper", children=[
 		## filter row
 		dht.Div(className="row form-group", children=[ 
@@ -28,7 +32,7 @@ def get_layout( ):
 		]),
 		
 		## row card stats
-		dht.Div(className="row", children=[ 
+		dht.Div(className="row", id ="cle-cards", children=[ 
            ui_commons.make_stats_cards_div( [], "cle-card-summaries" ) 
 		]),
 		
@@ -68,8 +72,8 @@ def register_callback(app):
 	#####
     ## callbacks for card summaries
     #####
-	@app.callback(Output('cle-card-summaries', 'children'),[Input('cle-filters-id', 'value')])
-	def update_cards(ref_reason):
+	@app.callback(Output('cle-card-summaries', 'children'),[Input('cle-filters-id', 'value'), Input( 'dbloader', 'value')], [State('cle-cards', 'children')])
+	def update_cards(ref_reason, n, old):
 		db = model_commons.get_cle_data()
 		if( len( db.index) > 0):
 			if ref_reason == model_commons.var_all_reasons:
@@ -81,17 +85,17 @@ def register_callback(app):
 			
 			lt = len( db[model_commons.var_bucket_reasons].unique() )
 			
-			t2 = t.columns[lt-1:] if ref_reason == model_commons.var_all_reasons else t.columns[1:]
+			t2 = t.columns[lt:] if ref_reason == model_commons.var_all_reasons else t.columns[1:]
 			
-			return [ ui_commons.make_stats_card(":{} - {}:".format(c, t[c][0]) , c) for c in t2]
+			return [ ui_commons.make_stats_card(c, t[c][0]) for c in t2]
 		else:
-			return []
+			return old #[]
 	
 	#####
     ## callbacks for card summaries
     #####	
-	@app.callback(Output('r1c2', 'children'), [Input('cle-filters-id', 'value')])
-	def update_graph2(ref_reason):
+	@app.callback(Output('r1c2', 'children'), [Input('cle-filters-id', 'value'), Input( 'dbloader', 'value')], [State('r1c2', 'children')])
+	def update_graph2(ref_reason, n, old):
 		db = model_commons.get_cle_data()
 		if( len( db.index) > 0):
 			if ref_reason == model_commons.var_all_reasons:
@@ -101,20 +105,15 @@ def register_callback(app):
 			
 			d = df["health_facility"].value_counts()
 			
-			return ui_commons.get_Bar_Chart('cle-r1g2', 
-				d.index,  
-				d,
-				title= "By Facility - {} ".format( ref_reason) ,
-				horizontal=True	
-			)
+			return ui_commons.get_Bar_Chart('cle-r1g2', d.index, d,title= "By Facility - {} ".format( ref_reason) ,horizontal=True	)
 		else:
-			return ui_commons.get_graph_holder('cle-r1g2')
+			return old #ui_commons.get_graph_holder('cle-r1g2')
 	
 	#####
     ## callbacks for card summaries
     #####	
-	@app.callback(Output('r1c3', 'children'), [Input('cle-filters-id', 'value')]) 
-	def update_graph3(ref_reason):
+	@app.callback(Output('r1c3', 'children'), [Input('cle-filters-id', 'value'), Input( 'dbloader', 'value')], [State('r1c3', 'children')]) 
+	def update_graph3(ref_reason, n, old):
 		db = model_commons.get_cle_data()
 		if( len( db.index) > 0):
 			if ref_reason == model_commons.var_all_reasons:
@@ -124,15 +123,15 @@ def register_callback(app):
 			
 			d = df["Month"].groupby(df["Month"], sort=False).count()
 			
-			return get_Line_Chart('cle-r1g3', d.index,  d, title= "Monthly - {} ".format( ref_reason ) )
+			return ui_commons.get_Line_Chart('cle-r1g3', d.index,  d, title= "Monthly - {} ".format( ref_reason ) )
 		else:
-			return ui_commons.get_graph_holder('cle-r1g3')
+			return old #ui_commons.get_graph_holder('cle-r1g3')
 	
 	#####
     ## callbacks for card summaries
     #####
-	@app.callback(Output('r1c4', 'children'), [Input('cle-filters-id', 'value')])
-	def update_graph4(ref_reason):
+	@app.callback(Output('r1c4', 'children'), [Input('cle-filters-id', 'value'), Input( 'dbloader', 'value')], [State('r1c4', 'children')] )
+	def update_graph4(ref_reason, n, old):
 		db = model_commons.get_cle_data()
 		if( len( db.index) > 0):
 			if ref_reason == model_commons.var_all_reasons:
@@ -142,7 +141,18 @@ def register_callback(app):
 		
 			d = df["health_facility_confirmation"].value_counts() 
 		
-			return get_Pie_Chart('cle-r1g4', d.index,  d, title = "Facility Confirmation - {}".format(ref_reason ) )
+			return ui_commons.get_Pie_Chart('cle-r1g4', d.index,  d, title = "Facility Confirmation - {}".format(ref_reason ) )
 		else: 
-			return ui_commons.get_graph_holder('cle-r1g4')
+			return old #ui_commons.get_graph_holder('cle-r1g4')
+	
+	@app.callback(Output('r1c1', 'children'), [Input( 'dbloader', 'value')], [State('r1c1', 'children')])
+	def first_load(n, old):
+		db = model_commons.get_cle_data()
+		lazy_logger("first_load", "DB = {}".format( db.shape ) )
+		if( len( db.index) > 0):
+			d = db[model_commons.var_bucket_reasons].value_counts()
+			return ui_commons.get_Bar_Chart('cle-r1g1', d.index,  d,  horizontal=True, title="All Referrals", marker=ui_commons.bar_color )
+		else:
+		  return old
+
 				
