@@ -103,7 +103,7 @@ def config_load(key=None):
         _awsid = StringIO(str(os.environ.get("AWS_ID"))).getvalue()
         _awskey = StringIO(str(os.environ.get("AWS_KEY"))).getvalue()
         _mode_cronned = StringIO(str(os.environ.get("UCRON"))).getvalue() == "TRUE"
-        lazy_logger("config_load", "FIN LOADED from ENV{} {} {} {} {}".format(_uword, _uwords, _uwho, _mode_cronned, _awsid) )
+        lazy_logger("config_load", "FIN LOADED from ENV{} {} {} {} {}") #.format(_uword, _uwords, _uwho, _mode_cronned, _awsid) )
     else:
         et, ev, etr = sys.exc_info()
         lazy_logger("config_load", "NOT in ENV - loading from file - {} {}".format(et, ev)) 
@@ -117,7 +117,7 @@ def config_load(key=None):
             _awsid = cp.get('worderz', 'awsid') #.getvalue()
             _awskey = cp.get('worderz', 'awskey') #.getvalue()
             _mode_cronned = cp.get('worderz', 'cron').upper() == "TRUE"
-            lazy_logger("config_load", "FIN config file loaded {} {} {} {} {}".format(_uword, _uwords, _uwho, _mode_cronned, _awsid) )
+            lazy_logger("config_load", "FIN config file loaded {} {} {} {} {}") #.format(_uword, _uwords, _uwho, _mode_cronned, _awsid) )
         except:
             et, ev, etr = sys.exc_info()
             lazy_logger("config_load", "ERROR config file not found - {} {}".format(et, ev) ) 
@@ -454,10 +454,10 @@ def get_clh_duration_details():
 ####
 def get_pa_duration_details():
     STARTED, LAST_UPDATED, DURATION = [1990, 1990, -1]
-    _db_clh = _db_frames[DB_CLH]
-    if( len(_db_clh.index) > 0 ):   
+    _db_cle = _db_frames[DB_CLE]
+    if( len(_db_cle.index) > 0 ):   
         STARTED = pd.to_datetime( '2018-10-26', format="%Y-%m-%d").strftime( '%d-%b-%Y') 
-        LAST_UPDATED = pd.to_datetime(_db_clh["reported_date"],format="%Y-%m-%d").max().strftime( '%d-%b-%Y')
+        LAST_UPDATED = pd.to_datetime(_db_cle["reported_date"],format="%Y-%m-%d").max().strftime( '%d-%b-%Y')
         DURATION = pd.to_datetime( LAST_UPDATED, format="%d-%b-%Y").to_period('M') - pd.to_datetime( STARTED, format="%d-%b-%Y").to_period('M')
     return STARTED, LAST_UPDATED, DURATION
 

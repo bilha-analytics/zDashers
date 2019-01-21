@@ -25,8 +25,8 @@ def get_layout( ):
 				children=[ 
 					ui_commons.get_Filter_Dropdown(  model_commons.get_cle_options_list(), 'Referral Reason', 'cle-filters-id') #model_commons.get_cle_options_list()
 			]), 
-			dht.Div( className="col-sm-4", 
-				children=[ dht.P("From: {} To: {} = {} months".format(zstart, zend, ztot) , className="card-title" ) 
+			dht.Div( className="col-sm-4",   id="cle-dated", 
+				children=[ dht.P("From: {} To: {} = Month # {}".format(zstart, zend, ztot) , className="card-title" ) 
 				]),
 			
 		]),
@@ -152,6 +152,15 @@ def register_callback(app):
 		if( len( db.index) > 0):
 			d = db[model_commons.var_bucket_reasons].value_counts()
 			return ui_commons.get_Bar_Chart('cle-r1g1', d.index,  d,  horizontal=True, title="All Referrals", marker=ui_commons.bar_color )
+		else:
+		  return old
+	
+	
+	@app.callback( Output("cle-dated", 'children'), [Input( 'dbloader', 'value')], [State('cle-dated', 'children')]) 
+	def update_dated_e(n, old):
+		zstart, zend, ztot = model_commons.get_cle_duration_details()
+		if zstart != 1990:
+			return dht.P("From: {} To: {} = Month # {}".format(zstart, zend, ztot), className="card-title" ) 
 		else:
 		  return old
 

@@ -67,22 +67,23 @@ def register_callback(app):
 		db = model_commons.get_cle_data()
 		lazy_logger("update_wcimage", "wc dat = {}".format( db.shape ) ) 
 		if len(db.index) > 0:
-			df = db if ref_reason == model_commons.var_HIVST else db[ db[model_commons.var_bucket_reasons] != model_commons.var_HIVST ]
-			lazy_logger("update_wcimage", "START wc dat filtered = {}".format( df.shape ) )
+			db = db if ref_reason == model_commons.var_HIVST else db[ db[model_commons.var_bucket_reasons] != model_commons.var_HIVST ]
+			lazy_logger("update_wcimage", "START wc dat filtered = {}".format( db.shape ) )
 
 			if ref_reason != model_commons.var_all_reasons:
-				df = df[ df[model_commons.var_bucket_reasons] == ref_reason] 
+				db = db[ db[model_commons.var_bucket_reasons] == ref_reason] 
 
-			lazy_logger("update_wcimage", "DONE wc dat filtered = {}".format( df.shape ) )
-			return ui_commons.plot_word_cloud( df["reason_for_referral"] , ref_reason) #dht.Img( src=ui_commons.plot_word_cloud( df["reason_for_referral"] , ref_reason) , id='wc1-img', width="80%", height="80%" )
+			lazy_logger("update_wcimage", "DONE wc dat filtered = {}".format( db.shape ) )
+			return ui_commons.plot_word_cloud( db["reason_for_referral"] , ref_reason) #dht.Img( src=ui_commons.plot_word_cloud( df["reason_for_referral"] , ref_reason) , id='wc1-img', width="80%", height="80%" )
 		else:
 			return  old #ui_commons.plot_word_cloud( pd.Series(["No Data Yet!",])  , "holder") 
-	
+	'''
 	STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'output')
 	@app.server.route('/output/<resource>' )
 	def serve_image(resource): 
+		lazy_logger("serve_image", "fetching from static path{}".format(STATIC_PATH )) 
 		return flask.send_from_directory(STATIC_PATH, resource) 
-	
+	''' 
 	#####
     ## callbacks for card summaries
     #####
@@ -99,7 +100,7 @@ def register_callback(app):
 		else:
 			return old #ui_commons.get_graph_holder('wc-r1g2')
 		
-	
+	'''
 	@app.callback(Output('wc-r1c1', 'children'), [Input( 'dbloader', 'value')], [State('wc-r1c1', 'children')])
 	def first_load_wc(n,old):
 		db = model_commons.get_cle_data()
@@ -107,5 +108,6 @@ def register_callback(app):
 			return ui_commons.plot_word_cloud( db["reason_for_referral"] , model_commons.var_all_reasons)
 		else:
 			return old
+	'''
 	
 	

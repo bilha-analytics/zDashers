@@ -11,7 +11,7 @@ from appmodel import model_commons
 ##
 ####
 def get_layout( ): 
-	zstart, zend, ztot = model_commons.get_cle_duration_details()
+	zstart, zend, ztot = model_commons.get_clh_duration_details()
 	return dht.Div(id='body-container', className="content-wrapper", children=[
 		## filter row
 		dht.Div(className="row form-group", children=[ 
@@ -22,8 +22,8 @@ def get_layout( ):
 				children=[ 
 					ui_commons.get_Filter_Dropdown( model_commons.get_clh_options_list() , 'Health Facility', 'clh-filters-id') 
 			]), 
-			dht.Div( className="col-sm-4", 
-				children=[ dht.P("From: {} To: {} = {} months".format(zstart, zend, ztot), className="card-title" ) 
+			dht.Div( className="col-sm-4",   id="clh-dated", 
+				children=[ dht.P("From: {} To: {} = Month # {}".format(zstart, zend, ztot), className="card-title" ) 
 				]),
 			
 		]),
@@ -148,3 +148,10 @@ def register_callback(app):
 		else: 
 			return old
 
+	@app.callback( Output("clh-dated", 'children'), [Input( 'dbloader', 'value')], [State('clh-dated', 'children')]) 
+	def update_dated_h(n, old):
+		zstart, zend, ztot = model_commons.get_clh_duration_details()
+		if zstart != 1990:
+			return dht.P("From: {} To: {} = Month # {}".format(zstart, zend, ztot), className="card-title" ) 
+		else:
+		  return old

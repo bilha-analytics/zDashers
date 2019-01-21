@@ -90,7 +90,7 @@ app.layout = dht.Div(className="container-scroller", children=[
 		#main content 
 		dht.Div( className="main-panel col-12", id="main-bodyz", children = [ 
 			dht.Div( className="row align-items-center d-flex flex-row card-info btn-info", 
-				children=[dht.H1("..\... Almost there, loading .../.. may take a minute ", id='logg',) ] )
+				children=[dht.H1("..... Almost there, loading ..... may take a minute ", id='logg',) ] )
 			])
 	]),
     dcc.Interval(id='dbloader', interval=0, n_intervals=0, max_intervals=1) ,
@@ -174,18 +174,15 @@ hivst.register_callback( app )
 predictives.register_callback( app ) 
 wordcloud_referral.register_callback( app ) 
 
-#STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'output')
-#@app.server.route('/output/<resource>' )
-#def serve_image(resource): 
-#	return flask.send_from_directory(STATIC_PATH, resource) 
 ####
 ##
 ##
 ####
-#@app.server.route('/dat/<resource>')
-#def fetch_csv():
-#	S3_BUCKEET = StringIO(str(os.environ.get("S3_BUCKET"))).getvalue()
-
+STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'output')
+@app.server.route('/output/<resource>' )
+def serve_image(resource): 
+	lazy_logger("serve_image", "fetching from static path{}".format(STATIC_PATH )) 
+	return flask.send_from_directory(STATIC_PATH, resource) 
 
 ####
 ##
